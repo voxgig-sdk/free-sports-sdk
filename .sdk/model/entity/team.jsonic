@@ -1,0 +1,129 @@
+# Entity: team
+
+main: kit: entity: team: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "id_team"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "int_formed_year"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "int_stadium_capacity"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_alternate"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_description_en"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_league"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_sport"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_stadium"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_stadium_location"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_team"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_team_badge"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_team_jersey"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_website"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "team"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "api_key"
+                orig: "api_key"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "t"
+                orig: "t"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/{apiKey}/searchteams.php"
+          parts: [
+            "{api_key}"
+            "searchteams.php"
+          ]
+          rename: {
+            param: {
+              apiKey: "api_key"
+            }
+          }
+          select: {
+            exist: [
+              "api_key"
+              "t"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

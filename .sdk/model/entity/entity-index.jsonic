@@ -1,0 +1,6 @@
+# Entity Models
+
+@"event.jsonic"
+@"league.jsonic"
+@"player.jsonic"
+@"team.jsonic"

@@ -1,0 +1,26 @@
+# BasicLeagueFlow
+
+main: kit: flow: BasicLeagueFlow:
+{
+  entity: "league",
+  kind: "basic",
+  name: "BasicLeagueFlow",
+  step: [
+    {
+      match: {
+        api_key: "api_key01"
+      }
+
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "league_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicLeagueFlow"
+}

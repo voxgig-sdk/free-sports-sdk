@@ -1,0 +1,26 @@
+# BasicTeamFlow
+
+main: kit: flow: BasicTeamFlow:
+{
+  entity: "team",
+  kind: "basic",
+  name: "BasicTeamFlow",
+  step: [
+    {
+      match: {
+        api_key: "api_key01"
+      }
+
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "team_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicTeamFlow"
+}

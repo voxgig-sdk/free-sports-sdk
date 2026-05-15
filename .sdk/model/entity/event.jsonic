@@ -1,0 +1,134 @@
+# Entity: event
+
+main: kit: entity: event: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "date_event"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "id_event"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "int_away_score"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "int_home_score"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_away_team"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_event"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_home_team"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_league"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_sport"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_status"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_thumb"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_time"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_venue"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_video"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "event"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "api_key"
+                orig: "api_key"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "e"
+                orig: "e"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/{apiKey}/searchevents.php"
+          parts: [
+            "{api_key}"
+            "searchevents.php"
+          ]
+          rename: {
+            param: {
+              apiKey: "api_key"
+            }
+          }
+          select: {
+            exist: [
+              "api_key"
+              "e"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,73 @@
+{
+  "existing": {
+    "team": {
+      "TEAM00": {
+        "id_team": "s82",
+        "int_formed_year": "s83",
+        "int_stadium_capacity": "s84",
+        "str_alternate": "s85",
+        "str_description_en": "s86",
+        "str_league": "s87",
+        "str_sport": "s88",
+        "str_stadium": "s89",
+        "str_stadium_location": "s8a",
+        "str_team": "s8b",
+        "str_team_badge": "s8c",
+        "str_team_jersey": "s8d",
+        "str_website": "s8e",
+        "api_key": "API_KEY01"
+      },
+      "TEAM01": {
+        "id_team": "s104",
+        "int_formed_year": "s105",
+        "int_stadium_capacity": "s106",
+        "str_alternate": "s107",
+        "str_description_en": "s108",
+        "str_league": "s109",
+        "str_sport": "s10a",
+        "str_stadium": "s10b",
+        "str_stadium_location": "s10c",
+        "str_team": "s10d",
+        "str_team_badge": "s10e",
+        "str_team_jersey": "s10f",
+        "str_website": "s110",
+        "api_key": "API_KEY01"
+      },
+      "TEAM02": {
+        "id_team": "s186",
+        "int_formed_year": "s187",
+        "int_stadium_capacity": "s188",
+        "str_alternate": "s189",
+        "str_description_en": "s18a",
+        "str_league": "s18b",
+        "str_sport": "s18c",
+        "str_stadium": "s18d",
+        "str_stadium_location": "s18e",
+        "str_team": "s18f",
+        "str_team_badge": "s190",
+        "str_team_jersey": "s191",
+        "str_website": "s192",
+        "api_key": "API_KEY01"
+      }
+    }
+  },
+  "new": {
+    "team": {
+      "team_ref01": {
+        "id_team": "s208",
+        "int_formed_year": "s209",
+        "int_stadium_capacity": "s20a",
+        "str_alternate": "s20b",
+        "str_description_en": "s20c",
+        "str_league": "s20d",
+        "str_sport": "s20e",
+        "str_stadium": "s20f",
+        "str_stadium_location": "s210",
+        "str_team": "s211",
+        "str_team_badge": "s212",
+        "str_team_jersey": "s213",
+        "str_website": "s214"
+      }
+    }
+  }
+}

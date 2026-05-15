@@ -1,0 +1,124 @@
+# Entity: player
+
+main: kit: entity: player: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "date_born"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "id_player"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_cutout"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_description_en"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_height"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_nationality"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_player"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_position"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_sport"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_team"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_thumb"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "str_weight"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "player"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                kind: "param"
+                name: "api_key"
+                orig: "api_key"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                kind: "query"
+                name: "p"
+                orig: "p"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/{apiKey}/searchplayers.php"
+          parts: [
+            "{api_key}"
+            "searchplayers.php"
+          ]
+          rename: {
+            param: {
+              apiKey: "api_key"
+            }
+          }
+          select: {
+            exist: [
+              "api_key"
+              "p"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,42 @@
+# Guide
+
+guide: {
+  metrics: count: entity: 4
+  metrics: count: path: 5
+  metrics: count: method: 5
+
+  entity: event: {
+    path: "/{apiKey}/searchevents.php": {
+      rename: param: "apiKey": *"api_key"
+      op: list: method: *GET
+      op: list: transform: res: *("`body.event`")|top
+    }
+  }
+
+  entity: league: {
+    path: "/{apiKey}/all_leagues.php": {
+      rename: param: "apiKey": *"api_key"
+      op: list: method: *GET
+    }
+    path: "/{apiKey}/lookupleague.php": {
+      rename: param: "apiKey": *"api_key"
+      op: list: method: *GET
+    }
+  }
+
+  entity: player: {
+    path: "/{apiKey}/searchplayers.php": {
+      rename: param: "apiKey": *"api_key"
+      op: list: method: *GET
+      op: list: transform: res: *("`body.player`")|top
+    }
+  }
+
+  entity: team: {
+    path: "/{apiKey}/searchteams.php": {
+      rename: param: "apiKey": *"api_key"
+      op: list: method: *GET
+    }
+  }
+
+}

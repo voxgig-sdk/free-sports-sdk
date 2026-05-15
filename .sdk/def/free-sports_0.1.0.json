@@ -1,0 +1,565 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Free Sports API",
+    "description": "Provides free JSON sports API for accessing basic sports data, including information on teams, players, events, and more. Offers test API keys, API limits, and upgrade options for premium features.",
+    "version": "1.0.0",
+    "contact": {
+      "email": "info@thesportsdb.com"
+    },
+    "termsOfService": "https://www.thesportsdb.com/terms"
+  },
+  "servers": [
+    {
+      "url": "https://www.thesportsdb.com/api/v1/json",
+      "description": "Production server (API v1)"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/{apiKey}/searchteams.php": {
+      "get": {
+        "summary": "Search for teams",
+        "description": "Search for teams by team name",
+        "operationId": "searchTeams",
+        "tags": [
+          "Teams"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "t",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Team name to search for"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with team data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "teams": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Team"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key"
+          }
+        }
+      }
+    },
+    "/{apiKey}/searchplayers.php": {
+      "get": {
+        "summary": "Search for players",
+        "description": "Search for players by player name",
+        "operationId": "searchPlayers",
+        "tags": [
+          "Players"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "p",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Player name to search for"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with player data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "player": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Player"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key"
+          }
+        }
+      }
+    },
+    "/{apiKey}/searchevents.php": {
+      "get": {
+        "summary": "Search for events",
+        "description": "Search for sporting events by event name",
+        "operationId": "searchEvents",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "e",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Event name to search for"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with event data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "event": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Event"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key"
+          }
+        }
+      }
+    },
+    "/{apiKey}/all_leagues.php": {
+      "get": {
+        "summary": "Get all leagues",
+        "description": "Retrieve a list of all available sports leagues",
+        "operationId": "getAllLeagues",
+        "tags": [
+          "Leagues"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with league data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "leagues": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/League"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key"
+          }
+        }
+      }
+    },
+    "/{apiKey}/lookupleague.php": {
+      "get": {
+        "summary": "Lookup league details",
+        "description": "Get detailed information about a specific league by league ID",
+        "operationId": "lookupLeague",
+        "tags": [
+          "Leagues"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "League ID to lookup"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with league details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "leagues": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LeagueDetail"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key"
+          },
+          "404": {
+            "description": "League not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "path",
+        "name": "apiKey",
+        "description": "API key obtained from TheSportsDB. Free tier available, premium tier ($9/month) provides enhanced features and higher limits."
+      }
+    },
+    "schemas": {
+      "Team": {
+        "type": "object",
+        "properties": {
+          "idTeam": {
+            "type": "string",
+            "description": "Unique team identifier"
+          },
+          "strTeam": {
+            "type": "string",
+            "description": "Team name"
+          },
+          "strAlternate": {
+            "type": "string",
+            "description": "Alternate team name"
+          },
+          "intFormedYear": {
+            "type": "string",
+            "description": "Year the team was formed"
+          },
+          "strSport": {
+            "type": "string",
+            "description": "Sport type"
+          },
+          "strLeague": {
+            "type": "string",
+            "description": "League name"
+          },
+          "strStadium": {
+            "type": "string",
+            "description": "Stadium name"
+          },
+          "strStadiumLocation": {
+            "type": "string",
+            "description": "Stadium location"
+          },
+          "intStadiumCapacity": {
+            "type": "string",
+            "description": "Stadium capacity"
+          },
+          "strDescriptionEN": {
+            "type": "string",
+            "description": "Team description in English"
+          },
+          "strTeamBadge": {
+            "type": "string",
+            "description": "URL to team badge image"
+          },
+          "strTeamJersey": {
+            "type": "string",
+            "description": "URL to team jersey image"
+          },
+          "strWebsite": {
+            "type": "string",
+            "description": "Team website URL"
+          }
+        }
+      },
+      "Player": {
+        "type": "object",
+        "properties": {
+          "idPlayer": {
+            "type": "string",
+            "description": "Unique player identifier"
+          },
+          "strPlayer": {
+            "type": "string",
+            "description": "Player name"
+          },
+          "strTeam": {
+            "type": "string",
+            "description": "Current team name"
+          },
+          "strNationality": {
+            "type": "string",
+            "description": "Player nationality"
+          },
+          "dateBorn": {
+            "type": "string",
+            "format": "date",
+            "description": "Player birth date"
+          },
+          "strSport": {
+            "type": "string",
+            "description": "Sport type"
+          },
+          "strPosition": {
+            "type": "string",
+            "description": "Playing position"
+          },
+          "strHeight": {
+            "type": "string",
+            "description": "Player height"
+          },
+          "strWeight": {
+            "type": "string",
+            "description": "Player weight"
+          },
+          "strDescriptionEN": {
+            "type": "string",
+            "description": "Player description in English"
+          },
+          "strThumb": {
+            "type": "string",
+            "description": "URL to player thumbnail image"
+          },
+          "strCutout": {
+            "type": "string",
+            "description": "URL to player cutout image"
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "idEvent": {
+            "type": "string",
+            "description": "Unique event identifier"
+          },
+          "strEvent": {
+            "type": "string",
+            "description": "Event name"
+          },
+          "strSport": {
+            "type": "string",
+            "description": "Sport type"
+          },
+          "strLeague": {
+            "type": "string",
+            "description": "League name"
+          },
+          "strHomeTeam": {
+            "type": "string",
+            "description": "Home team name"
+          },
+          "strAwayTeam": {
+            "type": "string",
+            "description": "Away team name"
+          },
+          "intHomeScore": {
+            "type": "string",
+            "description": "Home team score"
+          },
+          "intAwayScore": {
+            "type": "string",
+            "description": "Away team score"
+          },
+          "dateEvent": {
+            "type": "string",
+            "format": "date",
+            "description": "Event date"
+          },
+          "strTime": {
+            "type": "string",
+            "description": "Event time"
+          },
+          "strVenue": {
+            "type": "string",
+            "description": "Event venue"
+          },
+          "strStatus": {
+            "type": "string",
+            "description": "Event status"
+          },
+          "strThumb": {
+            "type": "string",
+            "description": "URL to event thumbnail image"
+          },
+          "strVideo": {
+            "type": "string",
+            "description": "URL to event video highlights"
+          }
+        }
+      },
+      "League": {
+        "type": "object",
+        "properties": {
+          "idLeague": {
+            "type": "string",
+            "description": "Unique league identifier"
+          },
+          "strLeague": {
+            "type": "string",
+            "description": "League name"
+          },
+          "strSport": {
+            "type": "string",
+            "description": "Sport type"
+          },
+          "strLeagueAlternate": {
+            "type": "string",
+            "description": "Alternate league name"
+          }
+        }
+      },
+      "LeagueDetail": {
+        "type": "object",
+        "properties": {
+          "idLeague": {
+            "type": "string",
+            "description": "Unique league identifier"
+          },
+          "strLeague": {
+            "type": "string",
+            "description": "League name"
+          },
+          "strSport": {
+            "type": "string",
+            "description": "Sport type"
+          },
+          "strLeagueAlternate": {
+            "type": "string",
+            "description": "Alternate league name"
+          },
+          "intFormedYear": {
+            "type": "string",
+            "description": "Year the league was formed"
+          },
+          "strCountry": {
+            "type": "string",
+            "description": "League country"
+          },
+          "strDescriptionEN": {
+            "type": "string",
+            "description": "League description in English"
+          },
+          "strBadge": {
+            "type": "string",
+            "description": "URL to league badge image"
+          },
+          "strLogo": {
+            "type": "string",
+            "description": "URL to league logo image"
+          },
+          "strWebsite": {
+            "type": "string",
+            "description": "League website URL"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Teams",
+      "description": "Operations related to sports teams"
+    },
+    {
+      "name": "Players",
+      "description": "Operations related to sports players"
+    },
+    {
+      "name": "Events",
+      "description": "Operations related to sporting events"
+    },
+    {
+      "name": "Leagues",
+      "description": "Operations related to sports leagues"
+    }
+  ]
+}

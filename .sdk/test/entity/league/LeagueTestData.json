@@ -1,0 +1,61 @@
+{
+  "existing": {
+    "league": {
+      "LEAGUE00": {
+        "id_league": "s64",
+        "int_formed_year": "s65",
+        "str_badge": "s66",
+        "str_country": "s67",
+        "str_description_en": "s68",
+        "str_league": "s69",
+        "str_league_alternate": "s6a",
+        "str_logo": "s6b",
+        "str_sport": "s6c",
+        "str_website": "s6d",
+        "api_key": "API_KEY01"
+      },
+      "LEAGUE01": {
+        "id_league": "sc8",
+        "int_formed_year": "sc9",
+        "str_badge": "sca",
+        "str_country": "scb",
+        "str_description_en": "scc",
+        "str_league": "scd",
+        "str_league_alternate": "sce",
+        "str_logo": "scf",
+        "str_sport": "sd0",
+        "str_website": "sd1",
+        "api_key": "API_KEY01"
+      },
+      "LEAGUE02": {
+        "id_league": "s12c",
+        "int_formed_year": "s12d",
+        "str_badge": "s12e",
+        "str_country": "s12f",
+        "str_description_en": "s130",
+        "str_league": "s131",
+        "str_league_alternate": "s132",
+        "str_logo": "s133",
+        "str_sport": "s134",
+        "str_website": "s135",
+        "api_key": "API_KEY01"
+      }
+    }
+  },
+  "new": {
+    "league": {
+      "league_ref01": {
+        "id_league": "s190",
+        "int_formed_year": "s191",
+        "str_badge": "s192",
+        "str_country": "s193",
+        "str_description_en": "s194",
+        "str_league": "s195",
+        "str_league_alternate": "s196",
+        "str_logo": "s197",
+        "str_sport": "s198",
+        "str_website": "s199"
+      }
+    }
+  }
+}

@@ -1,0 +1,531 @@
+# FreeSports PHP SDK
+
+The PHP SDK for the FreeSports API. Provides an entity-oriented interface using PHP conventions.
+
+
+## Install
+```bash
+composer require voxgig/free-sports-sdk
+```
+
+
+## Tutorial: your first API call
+
+This tutorial walks through creating a client, listing entities, and
+loading a specific record.
+
+### 1. Create a client
+
+```php
+<?php
+require_once 'freesports_sdk.php';
+
+$client = new FreeSportsSDK([
+    "apikey" => getenv("FREE-SPORTS_APIKEY"),
+]);
+```
+
+### 2. List events
+
+```php
+[$result, $err] = $client->Event(null)->list(null, null);
+if ($err) { throw new \Exception($err); }
+
+if (is_array($result)) {
+    foreach ($result as $item) {
+        $d = $item->data_get();
+        echo $d["id"] . " " . $d["name"] . "\n";
+    }
+}
+```
+
+
+## How-to guides
+
+### Make a direct HTTP request
+
+For endpoints not covered by entity methods:
+
+```php
+[$result, $err] = $client->direct([
+    "path" => "/api/resource/{id}",
+    "method" => "GET",
+    "params" => ["id" => "example"],
+]);
+if ($err) { throw new \Exception($err); }
+
+if ($result["ok"]) {
+    echo $result["status"];  // 200
+    print_r($result["data"]);  // response body
+}
+```
+
+### Prepare a request without sending it
+
+```php
+[$fetchdef, $err] = $client->prepare([
+    "path" => "/api/resource/{id}",
+    "method" => "DELETE",
+    "params" => ["id" => "example"],
+]);
+if ($err) { throw new \Exception($err); }
+
+echo $fetchdef["url"];
+echo $fetchdef["method"];
+print_r($fetchdef["headers"]);
+```
+
+### Use test mode
+
+Create a mock client for unit testing — no server required:
+
+```php
+$client = FreeSportsSDK::test(null, null);
+
+[$result, $err] = $client->FreeSports(null)->load(
+    ["id" => "test01"], null
+);
+// $result contains mock response data
+```
+
+### Use a custom fetch function
+
+Replace the HTTP transport with your own function:
+
+```php
+$mock_fetch = function ($url, $init) {
+    return [
+        [
+            "status" => 200,
+            "statusText" => "OK",
+            "headers" => [],
+            "json" => function () { return ["id" => "mock01"]; },
+        ],
+        null,
+    ];
+};
+
+$client = new FreeSportsSDK([
+    "base" => "http://localhost:8080",
+    "system" => [
+        "fetch" => $mock_fetch,
+    ],
+]);
+```
+
+### Run live tests
+
+Create a `.env.local` file at the project root:
+
+```
+FREE-SPORTS_TEST_LIVE=TRUE
+FREE-SPORTS_APIKEY=<your-key>
+```
+
+Then run:
+
+```bash
+cd php && ./vendor/bin/phpunit test/
+```
+
+
+## Reference
+
+### FreeSportsSDK
+
+```php
+require_once 'freesports_sdk.php';
+$client = new FreeSportsSDK($options);
+```
+
+Creates a new SDK client.
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `apikey` | `string` | API key for authentication. |
+| `base` | `string` | Base URL of the API server. |
+| `prefix` | `string` | URL path prefix prepended to all requests. |
+| `suffix` | `string` | URL path suffix appended to all requests. |
+| `feature` | `array` | Feature activation flags. |
+| `extend` | `array` | Additional Feature instances to load. |
+| `system` | `array` | System overrides (e.g. custom `fetch` callable). |
+
+### test
+
+```php
+$client = FreeSportsSDK::test($testopts, $sdkopts);
+```
+
+Creates a test-mode client with mock transport. Both arguments may be `null`.
+
+### FreeSportsSDK methods
+
+| Method | Signature | Description |
+| --- | --- | --- |
+| `options_map` | `(): array` | Deep copy of current SDK options. |
+| `get_utility` | `(): Utility` | Copy of the SDK utility object. |
+| `prepare` | `(array $fetchargs): array` | Build an HTTP request definition without sending. |
+| `direct` | `(array $fetchargs): array` | Build and send an HTTP request. |
+| `Event` | `($data): EventEntity` | Create a Event entity instance. |
+| `League` | `($data): LeagueEntity` | Create a League entity instance. |
+| `Player` | `($data): PlayerEntity` | Create a Player entity instance. |
+| `Team` | `($data): TeamEntity` | Create a Team entity instance. |
+
+### Entity interface
+
+All entities share the same interface.
+
+| Method | Signature | Description |
+| --- | --- | --- |
+| `load` | `($reqmatch, $ctrl): array` | Load a single entity by match criteria. |
+| `list` | `($reqmatch, $ctrl): array` | List entities matching the criteria. |
+| `create` | `($reqdata, $ctrl): array` | Create a new entity. |
+| `update` | `($reqdata, $ctrl): array` | Update an existing entity. |
+| `remove` | `($reqmatch, $ctrl): array` | Remove an entity. |
+| `data_get` | `(): array` | Get entity data. |
+| `data_set` | `($data): void` | Set entity data. |
+| `match_get` | `(): array` | Get entity match criteria. |
+| `match_set` | `($match): void` | Set entity match criteria. |
+| `make` | `(): Entity` | Create a new instance with the same options. |
+| `get_name` | `(): string` | Return the entity name. |
+
+### Result shape
+
+Entity operations return `[$result, $err]`. The first value is an
+`array` with these keys:
+
+| Key | Type | Description |
+| --- | --- | --- |
+| `ok` | `bool` | `true` if the HTTP status is 2xx. |
+| `status` | `int` | HTTP status code. |
+| `headers` | `array` | Response headers. |
+| `data` | `mixed` | Parsed JSON response body. |
+
+On error, `ok` is `false` and `$err` contains the error value.
+
+### Entities
+
+#### Event
+
+| Field | Description |
+| --- | --- |
+| `date_event` |  |
+| `id_event` |  |
+| `int_away_score` |  |
+| `int_home_score` |  |
+| `str_away_team` |  |
+| `str_event` |  |
+| `str_home_team` |  |
+| `str_league` |  |
+| `str_sport` |  |
+| `str_status` |  |
+| `str_thumb` |  |
+| `str_time` |  |
+| `str_venue` |  |
+| `str_video` |  |
+
+Operations: List.
+
+API path: `/{apiKey}/searchevents.php`
+
+#### League
+
+| Field | Description |
+| --- | --- |
+| `id_league` |  |
+| `int_formed_year` |  |
+| `str_badge` |  |
+| `str_country` |  |
+| `str_description_en` |  |
+| `str_league` |  |
+| `str_league_alternate` |  |
+| `str_logo` |  |
+| `str_sport` |  |
+| `str_website` |  |
+
+Operations: List.
+
+API path: `/{apiKey}/lookupleague.php`
+
+#### Player
+
+| Field | Description |
+| --- | --- |
+| `date_born` |  |
+| `id_player` |  |
+| `str_cutout` |  |
+| `str_description_en` |  |
+| `str_height` |  |
+| `str_nationality` |  |
+| `str_player` |  |
+| `str_position` |  |
+| `str_sport` |  |
+| `str_team` |  |
+| `str_thumb` |  |
+| `str_weight` |  |
+
+Operations: List.
+
+API path: `/{apiKey}/searchplayers.php`
+
+#### Team
+
+| Field | Description |
+| --- | --- |
+| `id_team` |  |
+| `int_formed_year` |  |
+| `int_stadium_capacity` |  |
+| `str_alternate` |  |
+| `str_description_en` |  |
+| `str_league` |  |
+| `str_sport` |  |
+| `str_stadium` |  |
+| `str_stadium_location` |  |
+| `str_team` |  |
+| `str_team_badge` |  |
+| `str_team_jersey` |  |
+| `str_website` |  |
+
+Operations: List.
+
+API path: `/{apiKey}/searchteams.php`
+
+
+
+## Entities
+
+
+### Event
+
+Create an instance: `const event = client.Event()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `date_event` | ``$STRING`` |  |
+| `id_event` | ``$STRING`` |  |
+| `int_away_score` | ``$STRING`` |  |
+| `int_home_score` | ``$STRING`` |  |
+| `str_away_team` | ``$STRING`` |  |
+| `str_event` | ``$STRING`` |  |
+| `str_home_team` | ``$STRING`` |  |
+| `str_league` | ``$STRING`` |  |
+| `str_sport` | ``$STRING`` |  |
+| `str_status` | ``$STRING`` |  |
+| `str_thumb` | ``$STRING`` |  |
+| `str_time` | ``$STRING`` |  |
+| `str_venue` | ``$STRING`` |  |
+| `str_video` | ``$STRING`` |  |
+
+#### Example: List
+
+```ts
+const events = await client.Event().list()
+```
+
+
+### League
+
+Create an instance: `const league = client.League()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id_league` | ``$STRING`` |  |
+| `int_formed_year` | ``$STRING`` |  |
+| `str_badge` | ``$STRING`` |  |
+| `str_country` | ``$STRING`` |  |
+| `str_description_en` | ``$STRING`` |  |
+| `str_league` | ``$STRING`` |  |
+| `str_league_alternate` | ``$STRING`` |  |
+| `str_logo` | ``$STRING`` |  |
+| `str_sport` | ``$STRING`` |  |
+| `str_website` | ``$STRING`` |  |
+
+#### Example: List
+
+```ts
+const leagues = await client.League().list()
+```
+
+
+### Player
+
+Create an instance: `const player = client.Player()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `date_born` | ``$STRING`` |  |
+| `id_player` | ``$STRING`` |  |
+| `str_cutout` | ``$STRING`` |  |
+| `str_description_en` | ``$STRING`` |  |
+| `str_height` | ``$STRING`` |  |
+| `str_nationality` | ``$STRING`` |  |
+| `str_player` | ``$STRING`` |  |
+| `str_position` | ``$STRING`` |  |
+| `str_sport` | ``$STRING`` |  |
+| `str_team` | ``$STRING`` |  |
+| `str_thumb` | ``$STRING`` |  |
+| `str_weight` | ``$STRING`` |  |
+
+#### Example: List
+
+```ts
+const players = await client.Player().list()
+```
+
+
+### Team
+
+Create an instance: `const team = client.Team()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id_team` | ``$STRING`` |  |
+| `int_formed_year` | ``$STRING`` |  |
+| `int_stadium_capacity` | ``$STRING`` |  |
+| `str_alternate` | ``$STRING`` |  |
+| `str_description_en` | ``$STRING`` |  |
+| `str_league` | ``$STRING`` |  |
+| `str_sport` | ``$STRING`` |  |
+| `str_stadium` | ``$STRING`` |  |
+| `str_stadium_location` | ``$STRING`` |  |
+| `str_team` | ``$STRING`` |  |
+| `str_team_badge` | ``$STRING`` |  |
+| `str_team_jersey` | ``$STRING`` |  |
+| `str_website` | ``$STRING`` |  |
+
+#### Example: List
+
+```ts
+const teams = await client.Team().list()
+```
+
+
+## Explanation
+
+### The operation pipeline
+
+Every entity operation (load, list, create, update, remove) follows a
+six-stage pipeline. Each stage fires a feature hook before executing:
+
+```
+PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
+```
+
+- **PrePoint**: Resolves which API endpoint to call based on the
+  operation name and entity configuration.
+- **PreSpec**: Builds the HTTP spec — URL, method, headers, body —
+  from the resolved point and the caller's parameters.
+- **PreRequest**: Sends the HTTP request. Features can intercept here
+  to replace the transport (as TestFeature does with mocks).
+- **PreResponse**: Parses the raw HTTP response.
+- **PreResult**: Extracts the business data from the parsed response.
+- **PreDone**: Final stage before returning to the caller. Entity
+  state (match, data) is updated here.
+
+If any stage returns an error, the pipeline short-circuits and the
+error is returned to the caller as the second element in the return array.
+
+### Features and hooks
+
+Features are the extension mechanism. A feature is a PHP class
+with hook methods named after pipeline stages (e.g. `PrePoint`,
+`PreSpec`). Each method receives the context.
+
+The SDK ships with built-in features:
+
+- **TestFeature**: In-memory mock transport for testing without a live server
+
+Features are initialized in order. Hooks fire in the order features
+were added, so later features can override earlier ones.
+
+### Data as arrays
+
+The PHP SDK uses plain PHP associative arrays throughout rather than typed
+objects. This mirrors the dynamic nature of the API and keeps the
+SDK flexible — no code generation is needed when the API schema
+changes.
+
+Use `Helpers::to_map()` to safely validate that a value is an array.
+
+### Directory structure
+
+```
+php/
+├── freesports_sdk.php          -- Main SDK class
+├── config.php                     -- Configuration
+├── features.php                   -- Feature factory
+├── core/                          -- Core types and context
+├── entity/                        -- Entity implementations
+├── feature/                       -- Built-in features (Base, Test, Log)
+├── utility/                       -- Utility functions and struct library
+└── test/                          -- Test suites
+```
+
+The main class (`freesports_sdk.php`) exports the SDK class
+and test helper. Import entity or utility modules directly only
+when needed.
+
+### Entity state
+
+Entity instances are stateful. After a successful `load`, the entity
+stores the returned data and match criteria internally.
+
+```php
+$moon = $client->Moon();
+[$result, $err] = $moon->load(["planet_id" => "earth", "id" => "luna"]);
+
+// $moon->dataGet() now returns the loaded moon data
+// $moon->matchGet() returns the last match criteria
+```
+
+Call `make()` to create a fresh instance with the same configuration
+but no stored state.
+
+### Direct vs entity access
+
+The entity interface handles URL construction, parameter placement,
+and response parsing automatically. Use it for standard CRUD operations.
+
+`direct()` gives full control over the HTTP request. Use it for
+non-standard endpoints, bulk operations, or any path not modelled as
+an entity. `prepare()` builds the request without sending it — useful
+for debugging or custom transport.
+
+
+## Full Reference
+
+See [REFERENCE.md](REFERENCE.md) for complete API reference
+documentation including all method signatures, entity field schemas,
+and detailed usage examples.

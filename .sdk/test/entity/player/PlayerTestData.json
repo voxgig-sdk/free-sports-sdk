@@ -1,0 +1,69 @@
+{
+  "existing": {
+    "player": {
+      "PLAYER00": {
+        "date_born": "s78",
+        "id_player": "s79",
+        "str_cutout": "s7a",
+        "str_description_en": "s7b",
+        "str_height": "s7c",
+        "str_nationality": "s7d",
+        "str_player": "s7e",
+        "str_position": "s7f",
+        "str_sport": "s80",
+        "str_team": "s81",
+        "str_thumb": "s82",
+        "str_weight": "s83",
+        "api_key": "API_KEY01"
+      },
+      "PLAYER01": {
+        "date_born": "sf0",
+        "id_player": "sf1",
+        "str_cutout": "sf2",
+        "str_description_en": "sf3",
+        "str_height": "sf4",
+        "str_nationality": "sf5",
+        "str_player": "sf6",
+        "str_position": "sf7",
+        "str_sport": "sf8",
+        "str_team": "sf9",
+        "str_thumb": "sfa",
+        "str_weight": "sfb",
+        "api_key": "API_KEY01"
+      },
+      "PLAYER02": {
+        "date_born": "s168",
+        "id_player": "s169",
+        "str_cutout": "s16a",
+        "str_description_en": "s16b",
+        "str_height": "s16c",
+        "str_nationality": "s16d",
+        "str_player": "s16e",
+        "str_position": "s16f",
+        "str_sport": "s170",
+        "str_team": "s171",
+        "str_thumb": "s172",
+        "str_weight": "s173",
+        "api_key": "API_KEY01"
+      }
+    }
+  },
+  "new": {
+    "player": {
+      "player_ref01": {
+        "date_born": "s1e0",
+        "id_player": "s1e1",
+        "str_cutout": "s1e2",
+        "str_description_en": "s1e3",
+        "str_height": "s1e4",
+        "str_nationality": "s1e5",
+        "str_player": "s1e6",
+        "str_position": "s1e7",
+        "str_sport": "s1e8",
+        "str_team": "s1e9",
+        "str_thumb": "s1ea",
+        "str_weight": "s1eb"
+      }
+    }
+  }
+}

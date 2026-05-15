@@ -1,0 +1,26 @@
+# BasicPlayerFlow
+
+main: kit: flow: BasicPlayerFlow:
+{
+  entity: "player",
+  kind: "basic",
+  name: "BasicPlayerFlow",
+  step: [
+    {
+      match: {
+        api_key: "api_key01"
+      }
+
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "player_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicPlayerFlow"
+}
