@@ -1,10 +1,10 @@
 package voxgigfreesportssdk
 
 import (
-	"github.com/voxgig-sdk/free-sports-sdk/core"
-	"github.com/voxgig-sdk/free-sports-sdk/entity"
-	"github.com/voxgig-sdk/free-sports-sdk/feature"
-	_ "github.com/voxgig-sdk/free-sports-sdk/utility"
+	"github.com/voxgig-sdk/free-sports-sdk/go/core"
+	"github.com/voxgig-sdk/free-sports-sdk/go/entity"
+	"github.com/voxgig-sdk/free-sports-sdk/go/feature"
+	_ "github.com/voxgig-sdk/free-sports-sdk/go/utility"
 )
 
 // Type aliases preserve external API.

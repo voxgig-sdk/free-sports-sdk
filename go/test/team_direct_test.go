@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/free-sports-sdk"
-	"github.com/voxgig-sdk/free-sports-sdk/core"
+	sdk "github.com/voxgig-sdk/free-sports-sdk/go"
+	"github.com/voxgig-sdk/free-sports-sdk/go/core"
 )
 
 func TestTeamDirect(t *testing.T) {

@@ -1,7 +1,7 @@
 package feature
 
 import (
-	"github.com/voxgig-sdk/free-sports-sdk/core"
+	"github.com/voxgig-sdk/free-sports-sdk/go/core"
 )
 
 type BaseFeature struct {

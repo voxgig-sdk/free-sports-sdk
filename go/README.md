@@ -5,14 +5,14 @@ The Golang SDK for the FreeSports API. Provides an entity-oriented interface usi
 
 ## Install
 ```bash
-go get github.com/voxgig-sdk/free-sports-sdk
+go get github.com/voxgig-sdk/free-sports-sdk/go
 ```
 
 If the module is not yet published to a registry, use a `replace` directive
 in your `go.mod` to point to a local checkout:
 
 ```bash
-go mod edit -replace github.com/voxgig-sdk/free-sports-sdk=../path/to/github.com/voxgig-sdk/free-sports-sdk
+go mod edit -replace github.com/voxgig-sdk/free-sports-sdk/go=../path/to/github.com/voxgig-sdk/free-sports-sdk/go
 ```
 
 
@@ -30,8 +30,8 @@ import (
     "fmt"
     "os"
 
-    sdk "github.com/voxgig-sdk/free-sports-sdk"
-    "github.com/voxgig-sdk/free-sports-sdk/core"
+    sdk "github.com/voxgig-sdk/free-sports-sdk/go"
+    "github.com/voxgig-sdk/free-sports-sdk/go/core"
 )
 
 func main() {
@@ -500,7 +500,7 @@ Use `core.ToMapAny()` to safely cast results and nested data.
 ### Package structure
 
 ```
-github.com/voxgig-sdk/free-sports-sdk/
+github.com/voxgig-sdk/free-sports-sdk/go/
 ├── free-sports.go        # Root package — type aliases and constructors
 ├── core/               # SDK core — client, types, pipeline
 ├── entity/             # Entity implementations
@@ -509,7 +509,7 @@ github.com/voxgig-sdk/free-sports-sdk/
 └── test/               # Test suites
 ```
 
-The root package (`github.com/voxgig-sdk/free-sports-sdk`) re-exports everything needed
+The root package (`github.com/voxgig-sdk/free-sports-sdk/go`) re-exports everything needed
 for normal use. Import sub-packages only when you need specific types
 like `core.ToMapAny`.
 

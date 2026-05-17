@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/free-sports-sdk"
-	"github.com/voxgig-sdk/free-sports-sdk/core"
+	sdk "github.com/voxgig-sdk/free-sports-sdk/go"
+	"github.com/voxgig-sdk/free-sports-sdk/go/core"
 
-	vs "github.com/voxgig/struct"
+	vs "github.com/voxgig-sdk/free-sports-sdk/go/utility/struct"
 )
 
 func TestEventEntity(t *testing.T) {
