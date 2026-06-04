@@ -76,14 +76,12 @@ def player_direct_setup(mockres)
   env = Runner.env_override({
     "FREESPORTS_TEST_PLAYER_ENTID" => {},
     "FREESPORTS_TEST_LIVE" => "FALSE",
-    "FREESPORTS_APIKEY" => "NONE",
   })
 
   live = env["FREESPORTS_TEST_LIVE"] == "TRUE"
 
   if live
     merged_opts = {
-      "apikey" => env["FREESPORTS_APIKEY"],
     }
     client = FreeSportsSDK.new(merged_opts)
     return {

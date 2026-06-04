@@ -77,14 +77,12 @@ function team_direct_setup(mockres)
   local env = runner.env_override({
     ["FREESPORTS_TEST_TEAM_ENTID"] = {},
     ["FREESPORTS_TEST_LIVE"] = "FALSE",
-    ["FREESPORTS_APIKEY"] = "NONE",
   })
 
   local live = env["FREESPORTS_TEST_LIVE"] == "TRUE"
 
   if live then
     local merged_opts = {
-      apikey = env["FREESPORTS_APIKEY"],
     }
     local client = sdk.new(merged_opts)
     return {

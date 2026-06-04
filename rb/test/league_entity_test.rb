@@ -85,7 +85,6 @@ def league_basic_setup(extra)
     "FREESPORTS_TEST_LEAGUE_ENTID" => idmap,
     "FREESPORTS_TEST_LIVE" => "FALSE",
     "FREESPORTS_TEST_EXPLAIN" => "FALSE",
-    "FREESPORTS_APIKEY" => "NONE",
   })
 
   idmap_resolved = Helpers.to_map(
@@ -97,7 +96,6 @@ def league_basic_setup(extra)
   if env["FREESPORTS_TEST_LIVE"] == "TRUE"
     merged_opts = Vs.merge([
       {
-        "apikey" => env["FREESPORTS_APIKEY"],
       },
       extra || {},
     ])
