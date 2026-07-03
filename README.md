@@ -1,21 +1,8 @@
 # FreeSports SDK
 
-Free JSON sports data and artwork covering leagues, teams, players, and events
+Free Sports API client, generated from the OpenAPI spec.
 
 > TypeScript, Python, PHP, Golang, Ruby, Lua SDKs, a CLI, an interactive REPL, and an MCP server for AI agents — all generated from one OpenAPI spec by [@voxgig/sdkgen](https://github.com/voxgig/sdkgen).
-
-## About Free Sports API
-
-The Free Sports API is provided by [TheSportsDB](https://www.thesportsdb.com/), a community-driven sports database that exposes its catalogue as JSON over HTTP at `https://www.thesportsdb.com/api/v1/json`. It covers a broad range of sports and includes both structured data and artwork.
-
-What you get from the API:
-
-- Lookups and listings for leagues, teams, players, and events
-- Search by name (events, players) and filters by league or season
-- Supplementary data such as venues, honours, TV listings and calendars, event highlights, and transfer information
-- Country lists and artwork assets associated with teams and players
-
-The free tier is served from `api/v1/json` and is intended for testing and light use; CORS is enabled on most endpoints. A paid tier (around USD 9/month at the time of writing) provides a dedicated production key, V2 API access, faster livescore updates, and video highlights. Specific rate limits for the free tier are not publicly enumerated, so treat the service as best-effort and cache where you can.
 
 ## Try it
 
@@ -49,29 +36,31 @@ gem install free-sports-sdk
 luarocks install free-sports-sdk
 ```
 
-## 30-second quickstart
+## Quickstart
 
 ### TypeScript
 
 ```ts
 import { FreeSportsSDK } from 'free-sports'
 
-const client = new FreeSportsSDK({})
+const client = new FreeSportsSDK({
+  apikey: process.env.FREE-SPORTS_APIKEY,
+})
 
 // List all events
 const events = await client.Event().list()
+console.log(events.data)
 ```
 
-See the [TypeScript README](ts/README.md) for the
-full guide, or scroll down for the same example in other languages.
+See the [TypeScript README](ts/README.md) for the full guide.
 
-## What's in the box
+## Surfaces
 
-| Surface | Use it for | Path |
-| --- | --- | --- |
-| **SDK** (TypeScript, Python, PHP, Golang, Ruby, Lua) | App integration | `ts/` `py/` `php/` `go/` `rb/` `lua/` |
-| **CLI** | Scripts, CI, ops, one-off API calls | `go-cli/` |
-| **MCP server** | AI agents (Claude, Cursor, Cline) | `go-mcp/` |
+| Surface | Path |
+| --- | --- |
+| **SDK** (TypeScript, Python, PHP, Golang, Ruby, Lua) | `ts/` `py/` `php/` `go/` `rb/` `lua/` |
+| **CLI** | `go-cli/` |
+| **MCP server** | `go-mcp/` |
 
 ## Use it from an AI agent (MCP)
 
@@ -101,10 +90,10 @@ The API exposes 4 entities:
 
 | Entity | Description | API path |
 | --- | --- | --- |
-| **Event** | A sporting fixture or match — searchable by name and season and retrievable with scores, highlights, and TV listings via the events endpoints. | `/{apiKey}/searchevents.php` |
-| **League** | A competition grouping teams (e.g. a national league or cup); the free tier exposes a list-all-leagues endpoint with a cap on the number returned. | `/{apiKey}/lookupleague.php` |
-| **Player** | An athlete profile with biographical fields such as birthday, searchable by name via the players endpoints. | `/{apiKey}/searchplayers.php` |
-| **Team** | A club or national side belonging to a league, listable by league and enriched with venue and artwork data. | `/{apiKey}/searchteams.php` |
+| **Event** |  | `/{apiKey}/searchevents.php` |
+| **League** |  | `/{apiKey}/lookupleague.php` |
+| **Player** |  | `/{apiKey}/searchplayers.php` |
+| **Team** |  | `/{apiKey}/searchteams.php` |
 
 Each entity supports the following operations where available: **load**,
 **list**, **create**, **update**, and **remove**.
@@ -114,12 +103,16 @@ Each entity supports the following operations where available: **load**,
 ### Python
 
 ```python
+import os
 from freesports_sdk import FreeSportsSDK
 
-client = FreeSportsSDK({})
+client = FreeSportsSDK({
+    "apikey": os.environ.get("FREE-SPORTS_APIKEY"),
+})
 
 # List all events
-events, err = client.Event(None).list(None, None)
+events, err = client.Event().list()
+print(events)
 ```
 
 ### PHP
@@ -128,10 +121,13 @@ events, err = client.Event(None).list(None, None)
 <?php
 require_once 'freesports_sdk.php';
 
-$client = new FreeSportsSDK([]);
+$client = new FreeSportsSDK([
+    "apikey" => getenv("FREE-SPORTS_APIKEY"),
+]);
 
 // List all events
-[$events, $err] = $client->Event(null)->list(null, null);
+[$events, $err] = $client->Event()->list();
+print_r($events);
 ```
 
 ### Golang
@@ -139,10 +135,13 @@ $client = new FreeSportsSDK([]);
 ```go
 import sdk "github.com/voxgig-sdk/free-sports-sdk/go"
 
-client := sdk.NewFreeSportsSDK(map[string]any{})
+client := sdk.NewFreeSportsSDK(map[string]any{
+    "apikey": os.Getenv("FREE-SPORTS_APIKEY"),
+})
 
 // List all events
 events, err := client.Event(nil).List(nil, nil)
+fmt.Println(events)
 ```
 
 ### Ruby
@@ -150,10 +149,13 @@ events, err := client.Event(nil).List(nil, nil)
 ```ruby
 require_relative "FreeSports_sdk"
 
-client = FreeSportsSDK.new({})
+client = FreeSportsSDK.new({
+  "apikey" => ENV["FREE-SPORTS_APIKEY"],
+})
 
 # List all events
-events, err = client.Event(nil).list(nil, nil)
+events, err = client.Event().list
+puts events
 ```
 
 ### Lua
@@ -161,10 +163,13 @@ events, err = client.Event(nil).list(nil, nil)
 ```lua
 local sdk = require("free-sports_sdk")
 
-local client = sdk.new({})
+local client = sdk.new({
+  apikey = os.getenv("FREE-SPORTS_APIKEY"),
+})
 
 -- List all events
-local events, err = client:Event(nil):list(nil, nil)
+local events, err = client:Event():list()
+print(events)
 ```
 
 ## Unit testing in offline mode
@@ -183,25 +188,21 @@ const result = await client.Event().load({ id: 'test01' })
 ### Python
 
 ```python
-client = FreeSportsSDK.test(None, None)
-result, err = client.Event(None).load(
-    {"id": "test01"}, None
-)
+client = FreeSportsSDK.test()
+result, err = client.Event().load({"id": "test01"})
 ```
 
 ### PHP
 
 ```php
-$client = FreeSportsSDK::test(null, null);
-[$result, $err] = $client->Event(null)->load(
-    ["id" => "test01"], null
-);
+$client = FreeSportsSDK::test();
+[$result, $err] = $client->Event()->load(["id" => "test01"]);
 ```
 
 ### Golang
 
 ```go
-client := sdk.TestSDK(nil, nil)
+client := sdk.Test()
 result, err := client.Event(nil).Load(
     map[string]any{"id": "test01"}, nil,
 )
@@ -210,19 +211,15 @@ result, err := client.Event(nil).Load(
 ### Ruby
 
 ```ruby
-client = FreeSportsSDK.test(nil, nil)
-result, err = client.Event(nil).load(
-  { "id" => "test01" }, nil
-)
+client = FreeSportsSDK.test
+result, err = client.Event().load({ "id" => "test01" })
 ```
 
 ### Lua
 
 ```lua
-local client = sdk.test(nil, nil)
-local result, err = client:Event(nil):load(
-  { id = "test01" }, nil
-)
+local client = sdk.test()
+local result, err = client:Event():load({ id = "test01" })
 ```
 
 ## How it works
@@ -326,16 +323,6 @@ local result, err = client:direct({
 - [Golang](go/README.md)
 - [Ruby](rb/README.md)
 - [Lua](lua/README.md)
-
-## Using the Free Sports API
-
-- Upstream: [https://www.thesportsdb.com/](https://www.thesportsdb.com/)
-- API docs: [https://www.thesportsdb.com/free_sports_api](https://www.thesportsdb.com/free_sports_api)
-
-- Free tier provided by TheSportsDB.com; remains free at point of access.
-- Usage governed by TheSportsDB terms of use and privacy policy.
-- Premium tier (paid) unlocks dedicated production API keys and the V2 API.
-- No explicit attribution requirement is published on the free tier page; check the official terms before redistributing data or artwork.
 
 ---
 

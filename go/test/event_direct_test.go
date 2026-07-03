@@ -118,12 +118,14 @@ func eventDirectSetup(mockres any) *eventDirectSetupResult {
 	env := envOverride(map[string]any{
 		"FREESPORTS_TEST_EVENT_ENTID": map[string]any{},
 		"FREESPORTS_TEST_LIVE":    "FALSE",
+		"FREESPORTS_APIKEY":       "NONE",
 	})
 
 	live := env["FREESPORTS_TEST_LIVE"] == "TRUE"
 
 	if live {
 		mergedOpts := map[string]any{
+			"apikey": env["FREESPORTS_APIKEY"],
 		}
 		client := sdk.NewFreeSportsSDK(mergedOpts)
 

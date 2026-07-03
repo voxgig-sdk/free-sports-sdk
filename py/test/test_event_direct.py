@@ -73,12 +73,14 @@ def _event_direct_setup(mockres):
     env = runner.env_override({
         "FREESPORTS_TEST_EVENT_ENTID": {},
         "FREESPORTS_TEST_LIVE": "FALSE",
+        "FREESPORTS_APIKEY": "NONE",
     })
 
     live = env.get("FREESPORTS_TEST_LIVE") == "TRUE"
 
     if live:
         merged_opts = {
+            "apikey": env.get("FREESPORTS_APIKEY"),
         }
         client = FreeSportsSDK(merged_opts)
         return {

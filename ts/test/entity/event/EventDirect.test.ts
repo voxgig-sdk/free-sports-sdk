@@ -86,12 +86,14 @@ function directSetup(mockres?: any) {
   const env = envOverride({
     'FREESPORTS_TEST_EVENT_ENTID': {},
     'FREESPORTS_TEST_LIVE': 'FALSE',
+    'FREESPORTS_APIKEY': 'NONE',
   })
 
   const live = 'TRUE' === env.FREESPORTS_TEST_LIVE
 
   if (live) {
     const client = new FreeSportsSDK({
+      apikey: env.FREESPORTS_APIKEY,
     })
 
     let idmap: any = env['FREESPORTS_TEST_EVENT_ENTID']
