@@ -10,13 +10,13 @@ The Ruby SDK for the FreeSports API — an entity-oriented client using idiomati
 
 ## Install
 ```bash
-gem install free-sports-sdk
+gem install voxgig-sdk-free-sports
 ```
 
 Or add to your `Gemfile`:
 
 ```ruby
-gem "free-sports-sdk"
+gem "voxgig-sdk-free-sports"
 ```
 
 Then run:

@@ -10,7 +10,7 @@ The Lua SDK for the FreeSports API — an entity-oriented client using Lua conve
 
 ## Install
 ```bash
-luarocks install free-sports-sdk
+luarocks install voxgig-sdk-free-sports
 ```
 
 If the module is not yet published, add the source directory to

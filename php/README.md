@@ -10,7 +10,7 @@ The PHP SDK for the FreeSports API — an entity-oriented client using PHP conve
 
 ## Install
 ```bash
-composer require voxgig/free-sports-sdk
+composer require voxgig-sdk/free-sports
 ```
 
 

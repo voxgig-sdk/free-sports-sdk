@@ -10,7 +10,7 @@ The Python SDK for the FreeSports API — an entity-oriented client following Py
 
 ## Install
 ```bash
-pip install free-sports-sdk
+pip install voxgig-sdk-free-sports
 ```
 
 Or install from source:

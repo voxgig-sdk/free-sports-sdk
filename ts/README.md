@@ -10,7 +10,7 @@ The TypeScript SDK for the FreeSports API — a type-safe, entity-oriented clien
 
 ## Install
 ```bash
-npm install free-sports
+npm install @voxgig-sdk/free-sports
 ```
 ## Tutorial: your first API call
 
