@@ -93,7 +93,7 @@ Prepare a fetch definition without sending. Returns the `fetchdef` and raises on
 ## EventEntity
 
 ```python
-event = client.event
+event = client.Event()
 ```
 
 ### Fields
@@ -122,7 +122,9 @@ event = client.event
 List entities matching the given criteria. Returns a list and raises on error.
 
 ```python
-results = client.event.list({})
+results = client.Event().list({})
+for event in results:
+    print(event)
 ```
 
 ### Common Methods
@@ -157,7 +159,7 @@ Return the entity name.
 ## LeagueEntity
 
 ```python
-league = client.league
+league = client.League()
 ```
 
 ### Fields
@@ -182,7 +184,9 @@ league = client.league
 List entities matching the given criteria. Returns a list and raises on error.
 
 ```python
-results = client.league.list({})
+results = client.League().list({})
+for league in results:
+    print(league)
 ```
 
 ### Common Methods
@@ -217,7 +221,7 @@ Return the entity name.
 ## PlayerEntity
 
 ```python
-player = client.player
+player = client.Player()
 ```
 
 ### Fields
@@ -244,7 +248,9 @@ player = client.player
 List entities matching the given criteria. Returns a list and raises on error.
 
 ```python
-results = client.player.list({})
+results = client.Player().list({})
+for player in results:
+    print(player)
 ```
 
 ### Common Methods
@@ -279,7 +285,7 @@ Return the entity name.
 ## TeamEntity
 
 ```python
-team = client.team
+team = client.Team()
 ```
 
 ### Fields
@@ -307,7 +313,9 @@ team = client.team
 List entities matching the given criteria. Returns a list and raises on error.
 
 ```python
-results = client.team.list({})
+results = client.Team().list({})
+for team in results:
+    print(team)
 ```
 
 ### Common Methods

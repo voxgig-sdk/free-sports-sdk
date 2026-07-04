@@ -30,7 +30,12 @@ go mod edit -replace github.com/voxgig-sdk/free-sports-sdk/go=../free-sports-sdk
 This tutorial walks through creating a client, listing entities, and
 loading a specific record.
 
-### 1. Create a client
+### Quickstart
+
+A complete program: create a client, then call the entity operations.
+Each operation returns `(value, error)` — the value is the data itself
+(there is no `{ok, data}` wrapper), so check `err` and use the value
+directly.
 
 ```go
 package main
@@ -38,32 +43,23 @@ package main
 import (
     "fmt"
     "os"
-
     sdk "github.com/voxgig-sdk/free-sports-sdk/go"
-    "github.com/voxgig-sdk/free-sports-sdk/go/core"
 )
 
 func main() {
     client := sdk.NewFreeSportsSDK(map[string]any{
         "apikey": os.Getenv("FREE_SPORTS_APIKEY"),
     })
-```
 
-### 2. List events
-
-```go
-    result, err := client.Event(nil).List(nil, nil)
+    // List event records — the value is the array of records itself.
+    events, err := client.Event(nil).List(nil, nil)
     if err != nil {
         panic(err)
     }
-
-    rm := core.ToMapAny(result)
-    if rm["ok"] == true {
-        for _, item := range rm["data"].([]any) {
-            p := core.ToMapAny(item)
-            fmt.Println(p["id"], p["name"])
-        }
+    for _, item := range events.([]any) {
+        fmt.Println(item)
     }
+}
 ```
 
 
@@ -113,10 +109,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-result, err := client.Event(nil).Load(
+event, err := client.Event(nil).Load(
     map[string]any{"id": "test01"}, nil,
 )
-// result contains mock response data
+if err != nil {
+    panic(err)
+}
+fmt.Println(event) // the loaded mock data
 ```
 
 ### Use a custom fetch function
@@ -195,7 +194,7 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `GetUtility` | `() *Utility` | Copy of the SDK utility object. |
 | `Prepare` | `(fetchargs map[string]any) (map[string]any, error)` | Build an HTTP request definition without sending. |
 | `Direct` | `(fetchargs map[string]any) (map[string]any, error)` | Build and send an HTTP request. |
-| `Event` | `(data map[string]any) FreeSportsEntity` | Create a Event entity instance. |
+| `Event` | `(data map[string]any) FreeSportsEntity` | Create an Event entity instance. |
 | `League` | `(data map[string]any) FreeSportsEntity` | Create a League entity instance. |
 | `Player` | `(data map[string]any) FreeSportsEntity` | Create a Player entity instance. |
 | `Team` | `(data map[string]any) FreeSportsEntity` | Create a Team entity instance. |
@@ -218,17 +217,24 @@ All entities implement the `FreeSportsEntity` interface.
 
 ### Result shape
 
-Entity operations return `(any, error)`. The `any` value is a
-`map[string]any` with these keys:
+Entity operations return `(value, error)`. The `value` is the
+operation's data **directly** — there is no wrapper:
 
-| Key | Type | Description |
-| --- | --- | --- |
-| `"ok"` | `bool` | `true` if the HTTP status is 2xx. |
-| `"status"` | `int` | HTTP status code. |
-| `"headers"` | `map[string]any` | Response headers. |
-| `"data"` | `any` | Parsed JSON response body. |
+| Operation | `value` |
+| --- | --- |
+| `Load` / `Create` / `Update` / `Remove` | the entity record (`map[string]any`) |
+| `List` | a `[]any` of entity records |
 
-On error, `"ok"` is `false` and `"err"` contains the error value.
+Check `err` first, then use the value directly (or the typed
+`...Typed` variants, which return the entity's model struct and a typed
+slice):
+
+    event, err := client.Event(nil).Load(map[string]any{"id": "example_id"}, nil)
+    if err != nil { /* handle */ }
+    // event is the loaded record
+
+Only `Direct()` returns a response envelope — a `map[string]any` with
+`"ok"`, `"status"`, `"headers"`, and `"data"` keys.
 
 ### Entities
 
@@ -354,7 +360,11 @@ Create an instance: `event := client.Event(nil)`
 #### Example: List
 
 ```go
-results, err := client.Event(nil).List(nil, nil)
+events, err := client.Event(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(events) // the array of records
 ```
 
 
@@ -386,7 +396,11 @@ Create an instance: `league := client.League(nil)`
 #### Example: List
 
 ```go
-results, err := client.League(nil).List(nil, nil)
+leagues, err := client.League(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(leagues) // the array of records
 ```
 
 
@@ -420,7 +434,11 @@ Create an instance: `player := client.Player(nil)`
 #### Example: List
 
 ```go
-results, err := client.Player(nil).List(nil, nil)
+players, err := client.Player(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(players) // the array of records
 ```
 
 
@@ -455,7 +473,11 @@ Create an instance: `team := client.Team(nil)`
 #### Example: List
 
 ```go
-results, err := client.Team(nil).List(nil, nil)
+teams, err := client.Team(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(teams) // the array of records
 ```
 
 

@@ -244,8 +244,9 @@ end
 
 
 
--- Idiomatic facade: client:event():list() / client:event():load({ id = ... })
-function FreeSportsSDK:event(data)
+-- Idiomatic facade: client:Event():list() / client:Event():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function FreeSportsSDK:Event(data)
   local EntityMod = require("entity.event_entity")
   if data == nil then
     if self._event == nil then
@@ -256,15 +257,10 @@ function FreeSportsSDK:event(data)
   return EntityMod.new(self, data)
 end
 
--- Deprecated: use client:event() instead.
-function FreeSportsSDK:Event(data)
-  local EntityMod = require("entity.event_entity")
-  return EntityMod.new(self, data)
-end
 
-
--- Idiomatic facade: client:league():list() / client:league():load({ id = ... })
-function FreeSportsSDK:league(data)
+-- Idiomatic facade: client:League():list() / client:League():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function FreeSportsSDK:League(data)
   local EntityMod = require("entity.league_entity")
   if data == nil then
     if self._league == nil then
@@ -275,15 +271,10 @@ function FreeSportsSDK:league(data)
   return EntityMod.new(self, data)
 end
 
--- Deprecated: use client:league() instead.
-function FreeSportsSDK:League(data)
-  local EntityMod = require("entity.league_entity")
-  return EntityMod.new(self, data)
-end
 
-
--- Idiomatic facade: client:player():list() / client:player():load({ id = ... })
-function FreeSportsSDK:player(data)
+-- Idiomatic facade: client:Player():list() / client:Player():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function FreeSportsSDK:Player(data)
   local EntityMod = require("entity.player_entity")
   if data == nil then
     if self._player == nil then
@@ -294,15 +285,10 @@ function FreeSportsSDK:player(data)
   return EntityMod.new(self, data)
 end
 
--- Deprecated: use client:player() instead.
-function FreeSportsSDK:Player(data)
-  local EntityMod = require("entity.player_entity")
-  return EntityMod.new(self, data)
-end
 
-
--- Idiomatic facade: client:team():list() / client:team():load({ id = ... })
-function FreeSportsSDK:team(data)
+-- Idiomatic facade: client:Team():list() / client:Team():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function FreeSportsSDK:Team(data)
   local EntityMod = require("entity.team_entity")
   if data == nil then
     if self._team == nil then
@@ -310,12 +296,6 @@ function FreeSportsSDK:team(data)
     end
     return self._team
   end
-  return EntityMod.new(self, data)
-end
-
--- Deprecated: use client:team() instead.
-function FreeSportsSDK:Team(data)
-  local EntityMod = require("entity.team_entity")
   return EntityMod.new(self, data)
 end
 

@@ -30,16 +30,14 @@ client = FreeSportsSDK.new({
 })
 ```
 
-### 2. List events
+### 2. List event records
 
 ```ruby
 begin
-  result = client.event.list
-  if result.is_a?(Array)
-    result.each do |item|
-      d = item.data_get
-      puts "#{d["id"]} #{d["name"]}"
-    end
+  # list returns an Array of Event records — iterate directly.
+  events = client.Event.list
+  events.each do |item|
+    puts "#{item["id"]} #{item["name"]}"
   end
 rescue => err
   warn "list failed: #{err}"
@@ -87,13 +85,17 @@ end
 
 ### Use test mode
 
-Create a mock client for unit testing — no server required:
+Create a mock client for unit testing — no server required. Seed fixture
+data via the `entity` option so offline calls resolve without a live server:
 
 ```ruby
-client = FreeSportsSDK.test
+client = FreeSportsSDK.test({
+  "entity" => { "event" => { "test01" => { "id" => "test01" } } },
+})
 
-result = client.event.load({ "id" => "test01" })
-# result contains mock response data
+# load returns the bare mock record (raises on error).
+event = client.Event.load({ "id" => "test01" })
+puts event
 ```
 
 ### Use a custom fetch function
@@ -171,7 +173,7 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `get_utility` | `() -> Utility` | Copy of the SDK utility object. |
 | `prepare` | `(fetchargs) -> Hash` | Build an HTTP request definition without sending. Raises on error. |
 | `direct` | `(fetchargs) -> Hash` | Build and send an HTTP request. Returns a result hash (`result["ok"]`); does not raise. |
-| `Event` | `(data) -> EventEntity` | Create a Event entity instance. |
+| `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
 | `League` | `(data) -> LeagueEntity` | Create a League entity instance. |
 | `Player` | `(data) -> PlayerEntity` | Create a Player entity instance. |
 | `Team` | `(data) -> TeamEntity` | Create a Team entity instance. |
@@ -305,7 +307,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.event`
+Create an instance: `event = client.Event`
 
 #### Operations
 
@@ -334,14 +336,15 @@ Create an instance: `const event = client.event`
 
 #### Example: List
 
-```ts
-const events = await client.event.list()
+```ruby
+# list returns an Array of Event records (raises on error).
+events = client.Event.list
 ```
 
 
 ### League
 
-Create an instance: `const league = client.league`
+Create an instance: `league = client.League`
 
 #### Operations
 
@@ -366,14 +369,15 @@ Create an instance: `const league = client.league`
 
 #### Example: List
 
-```ts
-const leagues = await client.league.list()
+```ruby
+# list returns an Array of League records (raises on error).
+leagues = client.League.list
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.player`
+Create an instance: `player = client.Player`
 
 #### Operations
 
@@ -400,14 +404,15 @@ Create an instance: `const player = client.player`
 
 #### Example: List
 
-```ts
-const players = await client.player.list()
+```ruby
+# list returns an Array of Player records (raises on error).
+players = client.Player.list
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.team`
+Create an instance: `team = client.Team`
 
 #### Operations
 
@@ -435,8 +440,9 @@ Create an instance: `const team = client.team`
 
 #### Example: List
 
-```ts
-const teams = await client.team.list()
+```ruby
+# list returns an Array of Team records (raises on error).
+teams = client.Team.list
 ```
 
 
@@ -511,7 +517,7 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```ruby
-event = client.event
+event = client.Event
 event.load({ "id" => "example_id" })
 
 # event.data_get now returns the loaded event data

@@ -31,18 +31,16 @@ $client = new FreeSportsSDK([
 ]);
 ```
 
-### 2. List events
+### 2. List event records
 
 ```php
 try {
-    $result = $client->event()->list();
-    if (is_array($result)) {
-        foreach ($result as $item) {
-            $d = $item->data_get();
-            echo $d["id"] . " " . $d["name"] . "\n";
-        }
+    // list() returns an array of Event records — iterate directly.
+    $events = $client->Event()->list();
+    foreach ($events as $item) {
+        echo $item["id"] . " " . $item["name"] . "\n";
     }
-} catch (\Exception $err) {
+} catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
 ```
@@ -88,13 +86,17 @@ print_r($fetchdef["headers"]);
 
 ### Use test mode
 
-Create a mock client for unit testing — no server required:
+Create a mock client for unit testing — no server required. Seed fixture
+data via the `entity` option so offline calls resolve without a live server:
 
 ```php
-$client = FreeSportsSDK::test();
+$client = FreeSportsSDK::test([
+    "entity" => ["event" => ["test01" => ["id" => "test01"]]],
+]);
 
-$result = $client->event()->load(["id" => "test01"]);
-// $result contains mock response data
+// load() returns the bare mock record (throws on error).
+$event = $client->Event()->load(["id" => "test01"]);
+print_r($event);
 ```
 
 ### Use a custom fetch function
@@ -175,7 +177,7 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `get_utility` | `(): Utility` | Copy of the SDK utility object. |
 | `prepare` | `(array $fetchargs): array` | Build an HTTP request definition without sending. |
 | `direct` | `(array $fetchargs): array` | Build and send an HTTP request. |
-| `Event` | `($data): EventEntity` | Create a Event entity instance. |
+| `Event` | `($data): EventEntity` | Create an Event entity instance. |
 | `League` | `($data): LeagueEntity` | Create a League entity instance. |
 | `Player` | `($data): PlayerEntity` | Create a Player entity instance. |
 | `Team` | `($data): TeamEntity` | Create a Team entity instance. |
@@ -310,7 +312,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.event`
+Create an instance: `$event = $client->Event();`
 
 #### Operations
 
@@ -339,14 +341,15 @@ Create an instance: `const event = client.event`
 
 #### Example: List
 
-```ts
-const events = await client.event.list()
+```php
+// list() returns an array of Event records (throws on error).
+$events = $client->Event()->list();
 ```
 
 
 ### League
 
-Create an instance: `const league = client.league`
+Create an instance: `$league = $client->League();`
 
 #### Operations
 
@@ -371,14 +374,15 @@ Create an instance: `const league = client.league`
 
 #### Example: List
 
-```ts
-const leagues = await client.league.list()
+```php
+// list() returns an array of League records (throws on error).
+$leagues = $client->League()->list();
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.player`
+Create an instance: `$player = $client->Player();`
 
 #### Operations
 
@@ -405,14 +409,15 @@ Create an instance: `const player = client.player`
 
 #### Example: List
 
-```ts
-const players = await client.player.list()
+```php
+// list() returns an array of Player records (throws on error).
+$players = $client->Player()->list();
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.team`
+Create an instance: `$team = $client->Team();`
 
 #### Operations
 
@@ -440,8 +445,9 @@ Create an instance: `const team = client.team`
 
 #### Example: List
 
-```ts
-const teams = await client.team.list()
+```php
+// list() returns an array of Team records (throws on error).
+$teams = $client->Team()->list();
 ```
 
 
@@ -516,7 +522,7 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```php
-$event = $client->event();
+$event = $client->Event();
 $event->load(["id" => "example_id"]);
 
 // $event->dataGet() now returns the loaded event data

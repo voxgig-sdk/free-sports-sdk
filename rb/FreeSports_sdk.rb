@@ -208,52 +208,28 @@ class FreeSportsSDK
   end
 
 
-  # Idiomatic facade: client.event.list / client.event.load({ "id" => ... })
-  def event
-    require_relative 'entity/event_entity'
-    @event ||= EventEntity.new(self, nil)
-  end
-
-  # Deprecated: use client.event instead.
+  # Canonical facade: client.Event.list / client.Event.load({ "id" => ... })
   def Event(data = nil)
     require_relative 'entity/event_entity'
     EventEntity.new(self, data)
   end
 
 
-  # Idiomatic facade: client.league.list / client.league.load({ "id" => ... })
-  def league
-    require_relative 'entity/league_entity'
-    @league ||= LeagueEntity.new(self, nil)
-  end
-
-  # Deprecated: use client.league instead.
+  # Canonical facade: client.League.list / client.League.load({ "id" => ... })
   def League(data = nil)
     require_relative 'entity/league_entity'
     LeagueEntity.new(self, data)
   end
 
 
-  # Idiomatic facade: client.player.list / client.player.load({ "id" => ... })
-  def player
-    require_relative 'entity/player_entity'
-    @player ||= PlayerEntity.new(self, nil)
-  end
-
-  # Deprecated: use client.player instead.
+  # Canonical facade: client.Player.list / client.Player.load({ "id" => ... })
   def Player(data = nil)
     require_relative 'entity/player_entity'
     PlayerEntity.new(self, data)
   end
 
 
-  # Idiomatic facade: client.team.list / client.team.load({ "id" => ... })
-  def team
-    require_relative 'entity/team_entity'
-    @team ||= TeamEntity.new(self, nil)
-  end
-
-  # Deprecated: use client.team instead.
+  # Canonical facade: client.Team.list / client.Team.load({ "id" => ... })
   def Team(data = nil)
     require_relative 'entity/team_entity'
     TeamEntity.new(self, data)

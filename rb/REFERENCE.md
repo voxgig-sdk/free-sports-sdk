@@ -99,7 +99,7 @@ same parameters as `direct()`. Raises on error.
 ## EventEntity
 
 ```ruby
-event = client.event
+event = client.Event
 ```
 
 ### Fields
@@ -128,7 +128,7 @@ event = client.event
 List entities matching the given criteria. Returns an array. Raises on error.
 
 ```ruby
-results = client.event.list(nil)
+results = client.Event.list(nil)
 ```
 
 ### Common Methods
@@ -164,7 +164,7 @@ Return the entity name.
 ## LeagueEntity
 
 ```ruby
-league = client.league
+league = client.League
 ```
 
 ### Fields
@@ -189,7 +189,7 @@ league = client.league
 List entities matching the given criteria. Returns an array. Raises on error.
 
 ```ruby
-results = client.league.list(nil)
+results = client.League.list(nil)
 ```
 
 ### Common Methods
@@ -225,7 +225,7 @@ Return the entity name.
 ## PlayerEntity
 
 ```ruby
-player = client.player
+player = client.Player
 ```
 
 ### Fields
@@ -252,7 +252,7 @@ player = client.player
 List entities matching the given criteria. Returns an array. Raises on error.
 
 ```ruby
-results = client.player.list(nil)
+results = client.Player.list(nil)
 ```
 
 ### Common Methods
@@ -288,7 +288,7 @@ Return the entity name.
 ## TeamEntity
 
 ```ruby
-team = client.team
+team = client.Team
 ```
 
 ### Fields
@@ -316,7 +316,7 @@ team = client.team
 List entities matching the given criteria. Returns an array. Raises on error.
 
 ```ruby
-results = client.team.list(nil)
+results = client.Team.list(nil)
 ```
 
 ### Common Methods

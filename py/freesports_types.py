@@ -4,94 +4,90 @@
 # params (op.<name>.points[].args.params[]). Field/param types come from the
 # canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 # @voxgig/apidef VALID_CANON). Do not edit by hand.
+#
+# These are TypedDicts, not dataclasses: the SDK ops return/accept plain dicts
+# at runtime, and a TypedDict IS a dict shape, so the types match the runtime.
+# Optional (req:false) keys are modelled as TypedDict key-optionality
+# (total=False), split into a required base + total=False subclass when a type
+# has both required and optional keys.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Optional, Any
+from typing import TypedDict, Any
 
 
-@dataclass
-class Event:
-    date_event: Optional[str] = None
-    id_event: Optional[str] = None
-    int_away_score: Optional[str] = None
-    int_home_score: Optional[str] = None
-    str_away_team: Optional[str] = None
-    str_event: Optional[str] = None
-    str_home_team: Optional[str] = None
-    str_league: Optional[str] = None
-    str_sport: Optional[str] = None
-    str_status: Optional[str] = None
-    str_thumb: Optional[str] = None
-    str_time: Optional[str] = None
-    str_venue: Optional[str] = None
-    str_video: Optional[str] = None
+class Event(TypedDict, total=False):
+    date_event: str
+    id_event: str
+    int_away_score: str
+    int_home_score: str
+    str_away_team: str
+    str_event: str
+    str_home_team: str
+    str_league: str
+    str_sport: str
+    str_status: str
+    str_thumb: str
+    str_time: str
+    str_venue: str
+    str_video: str
 
 
-@dataclass
-class EventListMatch:
+class EventListMatch(TypedDict):
     api_key: str
 
 
-@dataclass
-class League:
-    id_league: Optional[str] = None
-    int_formed_year: Optional[str] = None
-    str_badge: Optional[str] = None
-    str_country: Optional[str] = None
-    str_description_en: Optional[str] = None
-    str_league: Optional[str] = None
-    str_league_alternate: Optional[str] = None
-    str_logo: Optional[str] = None
-    str_sport: Optional[str] = None
-    str_website: Optional[str] = None
+class League(TypedDict, total=False):
+    id_league: str
+    int_formed_year: str
+    str_badge: str
+    str_country: str
+    str_description_en: str
+    str_league: str
+    str_league_alternate: str
+    str_logo: str
+    str_sport: str
+    str_website: str
 
 
-@dataclass
-class LeagueListMatch:
+class LeagueListMatch(TypedDict):
     api_key: str
 
 
-@dataclass
-class Player:
-    date_born: Optional[str] = None
-    id_player: Optional[str] = None
-    str_cutout: Optional[str] = None
-    str_description_en: Optional[str] = None
-    str_height: Optional[str] = None
-    str_nationality: Optional[str] = None
-    str_player: Optional[str] = None
-    str_position: Optional[str] = None
-    str_sport: Optional[str] = None
-    str_team: Optional[str] = None
-    str_thumb: Optional[str] = None
-    str_weight: Optional[str] = None
+class Player(TypedDict, total=False):
+    date_born: str
+    id_player: str
+    str_cutout: str
+    str_description_en: str
+    str_height: str
+    str_nationality: str
+    str_player: str
+    str_position: str
+    str_sport: str
+    str_team: str
+    str_thumb: str
+    str_weight: str
 
 
-@dataclass
-class PlayerListMatch:
+class PlayerListMatch(TypedDict):
     api_key: str
 
 
-@dataclass
-class Team:
-    id_team: Optional[str] = None
-    int_formed_year: Optional[str] = None
-    int_stadium_capacity: Optional[str] = None
-    str_alternate: Optional[str] = None
-    str_description_en: Optional[str] = None
-    str_league: Optional[str] = None
-    str_sport: Optional[str] = None
-    str_stadium: Optional[str] = None
-    str_stadium_location: Optional[str] = None
-    str_team: Optional[str] = None
-    str_team_badge: Optional[str] = None
-    str_team_jersey: Optional[str] = None
-    str_website: Optional[str] = None
+class Team(TypedDict, total=False):
+    id_team: str
+    int_formed_year: str
+    int_stadium_capacity: str
+    str_alternate: str
+    str_description_en: str
+    str_league: str
+    str_sport: str
+    str_stadium: str
+    str_stadium_location: str
+    str_team: str
+    str_team_badge: str
+    str_team_jersey: str
+    str_website: str
 
 
-@dataclass
-class TeamListMatch:
+class TeamListMatch(TypedDict):
     api_key: str
-

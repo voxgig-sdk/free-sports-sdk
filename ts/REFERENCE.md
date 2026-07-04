@@ -146,7 +146,7 @@ Alias for `FreeSportsSDK.test()`.
 ## EventEntity
 
 ```ts
-const event = client.event
+const event = client.Event()
 ```
 
 ### Fields
@@ -175,7 +175,7 @@ const event = client.event
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.event.list()
+const results = await client.Event().list()
 ```
 
 ### Common Methods
@@ -209,7 +209,7 @@ Return a copy of the entity options.
 ## LeagueEntity
 
 ```ts
-const league = client.league
+const league = client.League()
 ```
 
 ### Fields
@@ -234,7 +234,7 @@ const league = client.league
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.league.list()
+const results = await client.League().list()
 ```
 
 ### Common Methods
@@ -268,7 +268,7 @@ Return a copy of the entity options.
 ## PlayerEntity
 
 ```ts
-const player = client.player
+const player = client.Player()
 ```
 
 ### Fields
@@ -295,7 +295,7 @@ const player = client.player
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.player.list()
+const results = await client.Player().list()
 ```
 
 ### Common Methods
@@ -329,7 +329,7 @@ Return a copy of the entity options.
 ## TeamEntity
 
 ```ts
-const team = client.team
+const team = client.Team()
 ```
 
 ### Fields
@@ -357,7 +357,7 @@ const team = client.team
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.team.list()
+const results = await client.Team().list()
 ```
 
 ### Common Methods

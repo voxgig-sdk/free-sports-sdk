@@ -34,14 +34,16 @@ client = FreeSportsSDK({
 })
 ```
 
-### 2. List events
+### 2. List event records
+
+`list()` returns a `list` of records (each a `dict`) and raises on
+error — iterate it directly.
 
 ```python
 try:
-    result = client.event.list()
-    for item in result:
-        d = item.data_get()
-        print(d["id"], d["name"])
+    events = client.Event().list({})
+    for event in events:
+        print(event)
 except Exception as err:
     print(f"list failed: {err}")
 ```
@@ -89,8 +91,9 @@ Create a mock client for unit testing — no server required:
 ```python
 client = FreeSportsSDK.test()
 
-result = client.event.load({"id": "test01"})
-# result contains mock response data
+# Entity ops return the bare record and raise on error.
+event = client.Event().load({"id": "test01"})
+# event contains the mock response record
 ```
 
 ### Use a custom fetch function
@@ -168,7 +171,7 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `get_utility` | `() -> Utility` | Copy of the SDK utility object. |
 | `prepare` | `(fetchargs) -> dict` | Build an HTTP request definition without sending. Raises on error. |
 | `direct` | `(fetchargs) -> dict` | Build and send an HTTP request. Returns a result dict (branch on `ok`). |
-| `Event` | `(data) -> EventEntity` | Create a Event entity instance. |
+| `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
 | `League` | `(data) -> LeagueEntity` | Create a League entity instance. |
 | `Player` | `(data) -> PlayerEntity` | Create a Player entity instance. |
 | `Team` | `(data) -> TeamEntity` | Create a Team entity instance. |
@@ -303,7 +306,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.event`
+Create an instance: `event = client.Event()`
 
 #### Operations
 
@@ -332,14 +335,14 @@ Create an instance: `const event = client.event`
 
 #### Example: List
 
-```ts
-const events = await client.event.list()
+```python
+events = client.Event().list({})
 ```
 
 
 ### League
 
-Create an instance: `const league = client.league`
+Create an instance: `league = client.League()`
 
 #### Operations
 
@@ -364,14 +367,14 @@ Create an instance: `const league = client.league`
 
 #### Example: List
 
-```ts
-const leagues = await client.league.list()
+```python
+leagues = client.League().list({})
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.player`
+Create an instance: `player = client.Player()`
 
 #### Operations
 
@@ -398,14 +401,14 @@ Create an instance: `const player = client.player`
 
 #### Example: List
 
-```ts
-const players = await client.player.list()
+```python
+players = client.Player().list({})
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.team`
+Create an instance: `team = client.Team()`
 
 #### Operations
 
@@ -433,8 +436,8 @@ Create an instance: `const team = client.team`
 
 #### Example: List
 
-```ts
-const teams = await client.team.list()
+```python
+teams = client.Team().list({})
 ```
 
 
@@ -508,7 +511,7 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-event = client.event
+event = client.Event()
 event.load({"id": "example_id"})
 
 # event.data_get() now returns the loaded event data

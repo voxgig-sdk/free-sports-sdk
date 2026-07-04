@@ -28,9 +28,11 @@ const client = new FreeSportsSDK({
   apikey: process.env.FREE_SPORTS_APIKEY,
 })
 
-// List all events
-const events = await client.event.list()
-console.log(events.data)
+// List all events (returns Event[])
+const events = await client.Event().list()
+for (const event of events) {
+  console.log(event)
+}
 ```
 
 See the [TypeScript README](ts/README.md) for the full guide.
@@ -91,9 +93,10 @@ client = FreeSportsSDK({
     "apikey": os.environ.get("FREE_SPORTS_APIKEY"),
 })
 
-# List all events
-events = client.event.list()
-print(events)
+# List all events (returns a list, raises on error)
+events = client.Event().list({})
+for event in events:
+    print(event)
 ```
 
 ### PHP
@@ -106,8 +109,8 @@ $client = new FreeSportsSDK([
     "apikey" => getenv("FREE_SPORTS_APIKEY"),
 ]);
 
-// List all events (throws on error)
-$events = $client->event()->list();
+// List all events (returns an array; throws on error)
+$events = $client->Event()->list();
 print_r($events);
 ```
 
@@ -134,8 +137,8 @@ client = FreeSportsSDK.new({
   "apikey" => ENV["FREE_SPORTS_APIKEY"],
 })
 
-# List all events
-events = client.event.list
+# List all events (returns an Array; raises on error)
+events = client.Event.list
 puts events
 ```
 
@@ -149,7 +152,7 @@ local client = sdk.new({
 })
 
 -- List all events
-local events, err = client:event():list()
+local events, err = client:Event():list()
 print(events)
 ```
 
@@ -162,22 +165,27 @@ in-memory mock, so unit tests run offline.
 
 ```ts
 const client = FreeSportsSDK.test()
-const result = await client.event.load({ id: 'test01' })
-// result.ok === true, result.data contains mock data
+const event = await client.Event().load({ id: 'test01' })
+// event is a bare Event populated with mock data
+console.log(event)
 ```
 
 ### Python
 
 ```python
 client = FreeSportsSDK.test()
-result = client.event.load({"id": "test01"})
+event = client.Event().load({"id": "test01"})
+print(event)
 ```
 
 ### PHP
 
 ```php
-$client = FreeSportsSDK::test();
-$result = $client->event()->load(["id" => "test01"]);
+// Seed fixture data so offline calls resolve without a live server.
+$client = FreeSportsSDK::test([
+    "entity" => ["event" => ["test01" => ["id" => "test01"]]],
+]);
+$event = $client->Event()->load(["id" => "test01"]);
 ```
 
 ### Golang
@@ -192,15 +200,18 @@ result, err := client.Event(nil).Load(
 ### Ruby
 
 ```ruby
-client = FreeSportsSDK.test
-result = client.event.load({ "id" => "test01" })
+# Seed fixture data so offline calls resolve without a live server.
+client = FreeSportsSDK.test({
+  "entity" => { "event" => { "test01" => { "id" => "test01" } } },
+})
+event = client.Event.load({ "id" => "test01" })
 ```
 
 ### Lua
 
 ```lua
 local client = sdk.test()
-local result, err = client:event():load({ id = "test01" })
+local result, err = client:Event():load({ id = "test01" })
 ```
 
 ## How it works
@@ -248,6 +259,9 @@ const result = await client.direct({
   method: 'GET',
   params: { id: 'example' },
 })
+if (result instanceof Error) {
+  throw result
+}
 console.log(result.data)
 ```
 

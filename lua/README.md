@@ -33,17 +33,17 @@ local client = sdk.new({
 })
 ```
 
-### 2. List events
+### 2. List event records
+
+Entity operations return `(value, err)`. For `list`, `value` is the
+array of records itself — iterate it directly (there is no wrapper).
 
 ```lua
-local result, err = client:event():list()
+local events, err = client:Event():list()
 if err then error(err) end
 
-if type(result) == "table" then
-  for _, item in ipairs(result) do
-    local d = item:data_get()
-    print(d["id"], d["name"])
-  end
+for _, item in ipairs(events) do
+  print(item["id"], item["name"])
 end
 ```
 
@@ -90,8 +90,8 @@ Create a mock client for unit testing — no server required:
 ```lua
 local client = sdk.test()
 
-local result, err = client:event():load({ id = "test01" })
--- result contains mock response data
+local result, err = client:Event():load({ id = "test01" })
+-- result is the loaded data; err is set on failure
 ```
 
 ### Use a custom fetch function
@@ -171,7 +171,7 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `get_utility` | `() -> Utility` | Copy of the SDK utility object. |
 | `prepare` | `(fetchargs) -> table, err` | Build an HTTP request definition without sending. |
 | `direct` | `(fetchargs) -> table, err` | Build and send an HTTP request. |
-| `Event` | `(data) -> EventEntity` | Create a Event entity instance. |
+| `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
 | `League` | `(data) -> LeagueEntity` | Create a League entity instance. |
 | `Player` | `(data) -> PlayerEntity` | Create a Player entity instance. |
 | `Team` | `(data) -> TeamEntity` | Create a Team entity instance. |
@@ -196,17 +196,22 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return `(any, err)`. The first value is a
-`table` with these keys:
+Entity operations return `(value, err)`. The `value` is the operation's
+data **directly** — there is no wrapper:
 
-| Key | Type | Description |
-| --- | --- | --- |
-| `ok` | `boolean` | `true` if the HTTP status is 2xx. |
-| `status` | `number` | HTTP status code. |
-| `headers` | `table` | Response headers. |
-| `data` | `any` | Parsed JSON response body. |
+| Operation | `value` |
+| --- | --- |
+| `load` / `create` / `update` / `remove` | the entity record (a `table`) |
+| `list` | an array (`table`) of entity records |
 
-On error, `ok` is `false` and `err` contains the error value.
+Check `err` first (it is non-`nil` on failure), then use `value`:
+
+    local event, err = client:Event():load({ id = "example_id" })
+    if err then error(err) end
+    -- event is the loaded record
+
+Only `direct()` returns a response envelope — a `table` with `ok`,
+`status`, `headers`, and `data` keys.
 
 ### Entities
 
@@ -302,7 +307,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.event`
+Create an instance: `local event = client:Event(nil)`
 
 #### Operations
 
@@ -331,14 +336,14 @@ Create an instance: `const event = client.event`
 
 #### Example: List
 
-```ts
-const events = await client.event.list()
+```lua
+local events, err = client:Event():list()
 ```
 
 
 ### League
 
-Create an instance: `const league = client.league`
+Create an instance: `local league = client:League(nil)`
 
 #### Operations
 
@@ -363,14 +368,14 @@ Create an instance: `const league = client.league`
 
 #### Example: List
 
-```ts
-const leagues = await client.league.list()
+```lua
+local leagues, err = client:League():list()
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.player`
+Create an instance: `local player = client:Player(nil)`
 
 #### Operations
 
@@ -397,14 +402,14 @@ Create an instance: `const player = client.player`
 
 #### Example: List
 
-```ts
-const players = await client.player.list()
+```lua
+local players, err = client:Player():list()
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.team`
+Create an instance: `local team = client:Team(nil)`
 
 #### Operations
 
@@ -432,8 +437,8 @@ Create an instance: `const team = client.team`
 
 #### Example: List
 
-```ts
-const teams = await client.team.list()
+```lua
+local teams, err = client:Team():list()
 ```
 
 
@@ -508,7 +513,7 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```lua
-local event = client:event()
+local event = client:Event()
 event:load({ id = "example_id" })
 
 -- event:data_get() now returns the loaded event data

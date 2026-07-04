@@ -207,56 +207,28 @@ class FreeSportsSDK {
 
 
 
-  _event?: EventEntity
-
-  // Idiomatic facade: `client.event.list()` / `client.event.load({ id })`.
-  get event(): EventEntity {
-    return (this._event ??= new EventEntity(this, undefined))
-  }
-
-  /** @deprecated Use `client.event` instead. */
+  // Entity access: `client.Event().list()` / `client.Event().load({ id })`.
   Event(data?: any) {
     const self = this
     return new EventEntity(self,data)
   }
 
 
-  _league?: LeagueEntity
-
-  // Idiomatic facade: `client.league.list()` / `client.league.load({ id })`.
-  get league(): LeagueEntity {
-    return (this._league ??= new LeagueEntity(this, undefined))
-  }
-
-  /** @deprecated Use `client.league` instead. */
+  // Entity access: `client.League().list()` / `client.League().load({ id })`.
   League(data?: any) {
     const self = this
     return new LeagueEntity(self,data)
   }
 
 
-  _player?: PlayerEntity
-
-  // Idiomatic facade: `client.player.list()` / `client.player.load({ id })`.
-  get player(): PlayerEntity {
-    return (this._player ??= new PlayerEntity(this, undefined))
-  }
-
-  /** @deprecated Use `client.player` instead. */
+  // Entity access: `client.Player().list()` / `client.Player().load({ id })`.
   Player(data?: any) {
     const self = this
     return new PlayerEntity(self,data)
   }
 
 
-  _team?: TeamEntity
-
-  // Idiomatic facade: `client.team.list()` / `client.team.load({ id })`.
-  get team(): TeamEntity {
-    return (this._team ??= new TeamEntity(this, undefined))
-  }
-
-  /** @deprecated Use `client.team` instead. */
+  // Entity access: `client.Team().list()` / `client.Team().load({ id })`.
   Team(data?: any) {
     const self = this
     return new TeamEntity(self,data)

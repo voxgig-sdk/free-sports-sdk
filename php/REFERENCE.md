@@ -98,7 +98,7 @@ Prepare a fetch definition without sending the request. Returns the
 ## EventEntity
 
 ```php
-$event = $client->event();
+$event = $client->Event();
 ```
 
 ### Fields
@@ -127,7 +127,7 @@ $event = $client->event();
 List entities matching the given criteria. Returns an array. Throws on error.
 
 ```php
-$results = $client->event()->list([]);
+$results = $client->Event()->list([]);
 ```
 
 ### Common Methods
@@ -163,7 +163,7 @@ Return the entity name.
 ## LeagueEntity
 
 ```php
-$league = $client->league();
+$league = $client->League();
 ```
 
 ### Fields
@@ -188,7 +188,7 @@ $league = $client->league();
 List entities matching the given criteria. Returns an array. Throws on error.
 
 ```php
-$results = $client->league()->list([]);
+$results = $client->League()->list([]);
 ```
 
 ### Common Methods
@@ -224,7 +224,7 @@ Return the entity name.
 ## PlayerEntity
 
 ```php
-$player = $client->player();
+$player = $client->Player();
 ```
 
 ### Fields
@@ -251,7 +251,7 @@ $player = $client->player();
 List entities matching the given criteria. Returns an array. Throws on error.
 
 ```php
-$results = $client->player()->list([]);
+$results = $client->Player()->list([]);
 ```
 
 ### Common Methods
@@ -287,7 +287,7 @@ Return the entity name.
 ## TeamEntity
 
 ```php
-$team = $client->team();
+$team = $client->Team();
 ```
 
 ### Fields
@@ -315,7 +315,7 @@ $team = $client->team();
 List entities matching the given criteria. Returns an array. Throws on error.
 
 ```php
-$results = $client->team()->list([]);
+$results = $client->Team()->list([]);
 ```
 
 ### Common Methods

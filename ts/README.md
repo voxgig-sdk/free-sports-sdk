@@ -30,15 +30,15 @@ const client = new FreeSportsSDK({
 })
 ```
 
-### 2. List events
+### 2. List event records
+
+`list()` resolves to an array of Event objects — iterate it directly:
 
 ```ts
-const result = await client.event.list()
+const events = await client.Event().list()
 
-if (result.ok) {
-  for (const item of result.data) {
-    console.log(item.id, item.name)
-  }
+for (const event of events) {
+  console.log(event)
 }
 ```
 
@@ -56,6 +56,9 @@ const result = await client.direct({
   params: { id: 'example' },
 })
 
+if (result instanceof Error) {
+  throw result
+}
 if (result.ok) {
   console.log(result.status)  // 200
   console.log(result.data)    // response body
@@ -84,9 +87,9 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = FreeSportsSDK.test()
 
-const result = await client.event.load({ id: 'test01' })
-// result.ok === true
-// result.data contains mock response data
+const event = await client.Event().load({ id: 'test01' })
+// event is a bare entity populated with mock response data
+console.log(event)
 ```
 
 You can also use the instance method:
@@ -101,7 +104,7 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.event
+const entity = client.Event()
 
 // First call sets internal match
 await entity.load({ id: 'example' })
@@ -183,7 +186,7 @@ new FreeSportsSDK(options?: {
 | `utility()` | `Utility` | Deep copy of the SDK utility object. |
 | `prepare(fetchargs?)` | `Promise<FetchDef>` | Build an HTTP request definition without sending it. |
 | `direct(fetchargs?)` | `Promise<DirectResult>` | Build and send an HTTP request. |
-| `Event(data?)` | `EventEntity` | Create a Event entity instance. |
+| `Event(data?)` | `EventEntity` | Create an Event entity instance. |
 | `League(data?)` | `LeagueEntity` | Create a League entity instance. |
 | `Player(data?)` | `PlayerEntity` | Create a Player entity instance. |
 | `Team(data?)` | `TeamEntity` | Create a Team entity instance. |
@@ -203,29 +206,30 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `load(reqmatch?, ctrl?): Promise<Result>` | Load a single entity by match criteria. |
-| `list` | `list(reqmatch?, ctrl?): Promise<Result>` | List entities matching the criteria. |
-| `create` | `create(reqdata?, ctrl?): Promise<Result>` | Create a new entity. |
-| `update` | `update(reqdata?, ctrl?): Promise<Result>` | Update an existing entity. |
-| `remove` | `remove(reqmatch?, ctrl?): Promise<Result>` | Remove an entity. |
+| `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria. |
+| `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |
+| `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |
+| `update` | `update(reqdata?, ctrl?): Promise<Entity>` | Update an existing entity. |
+| `remove` | `remove(reqmatch?, ctrl?): Promise<void>` | Remove an entity. |
 | `data` | `data(data?): any` | Get or set entity data. |
 | `match` | `match(match?): any` | Get or set entity match criteria. |
 | `make` | `make(): Entity` | Create a new instance with the same options. |
 | `client` | `client(): FreeSportsSDK` | Return the parent SDK client. |
 | `entopts` | `entopts(): object` | Return a copy of the entity options. |
 
-#### Result shape
+#### Return values
 
-All entity operations return a Result object:
+Entity operations resolve to the entity data directly — there is no
+result envelope:
 
-```ts
-{
-  ok: boolean      // true if the HTTP status is 2xx
-  status: number   // HTTP status code
-  headers: object  // response headers
-  data: any        // parsed JSON response body
-}
-```
+- `load`, `create` and `update` resolve to a single entity object.
+- `list` resolves to an **array** of entity objects (iterate it directly;
+  there is no `.data` and no `.ok`).
+- `remove` resolves to `void`.
+
+On a failed request these methods **throw**, so wrap calls in
+`try`/`catch` to handle errors. Only `direct()` returns the result
+envelope described below.
 
 ### DirectResult shape
 
@@ -349,7 +353,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.event`
+Create an instance: `const event = client.Event()`
 
 #### Operations
 
@@ -379,13 +383,13 @@ Create an instance: `const event = client.event`
 #### Example: List
 
 ```ts
-const events = await client.event.list()
+const events = await client.Event().list()
 ```
 
 
 ### League
 
-Create an instance: `const league = client.league`
+Create an instance: `const league = client.League()`
 
 #### Operations
 
@@ -411,13 +415,13 @@ Create an instance: `const league = client.league`
 #### Example: List
 
 ```ts
-const leagues = await client.league.list()
+const leagues = await client.League().list()
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.player`
+Create an instance: `const player = client.Player()`
 
 #### Operations
 
@@ -445,13 +449,13 @@ Create an instance: `const player = client.player`
 #### Example: List
 
 ```ts
-const players = await client.player.list()
+const players = await client.Player().list()
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.team`
+Create an instance: `const team = client.Team()`
 
 #### Operations
 
@@ -480,7 +484,7 @@ Create an instance: `const team = client.team`
 #### Example: List
 
 ```ts
-const teams = await client.team.list()
+const teams = await client.Team().list()
 ```
 
 
@@ -551,7 +555,7 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const event = client.event
+const event = client.Event()
 await event.load({ id: "example_id" })
 
 // event.data() now returns the loaded event data

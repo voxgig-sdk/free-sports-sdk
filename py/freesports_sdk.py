@@ -220,73 +220,33 @@ class FreeSportsSDK:
         }
 
 
-    @property
-    def event(self):
-        """Idiomatic facade: client.event.list() / client.event.load({"id": ...})."""
-        from entity.event_entity import EventEntity
-        cached = getattr(self, "_event", None)
-        if cached is None:
-            cached = EventEntity(self, None)
-            self._event = cached
-        return cached
-
-    def Event(self, data=None):
-        # Deprecated: use client.event instead.
+    def Event(self, data=None) -> "EventEntity":
+        """Entity factory: client.Event().list({}) / client.Event().load({"id": ...})."""
         from entity.event_entity import EventEntity
         return EventEntity(self, data)
 
 
-    @property
-    def league(self):
-        """Idiomatic facade: client.league.list() / client.league.load({"id": ...})."""
-        from entity.league_entity import LeagueEntity
-        cached = getattr(self, "_league", None)
-        if cached is None:
-            cached = LeagueEntity(self, None)
-            self._league = cached
-        return cached
-
-    def League(self, data=None):
-        # Deprecated: use client.league instead.
+    def League(self, data=None) -> "LeagueEntity":
+        """Entity factory: client.League().list({}) / client.League().load({"id": ...})."""
         from entity.league_entity import LeagueEntity
         return LeagueEntity(self, data)
 
 
-    @property
-    def player(self):
-        """Idiomatic facade: client.player.list() / client.player.load({"id": ...})."""
-        from entity.player_entity import PlayerEntity
-        cached = getattr(self, "_player", None)
-        if cached is None:
-            cached = PlayerEntity(self, None)
-            self._player = cached
-        return cached
-
-    def Player(self, data=None):
-        # Deprecated: use client.player instead.
+    def Player(self, data=None) -> "PlayerEntity":
+        """Entity factory: client.Player().list({}) / client.Player().load({"id": ...})."""
         from entity.player_entity import PlayerEntity
         return PlayerEntity(self, data)
 
 
-    @property
-    def team(self):
-        """Idiomatic facade: client.team.list() / client.team.load({"id": ...})."""
-        from entity.team_entity import TeamEntity
-        cached = getattr(self, "_team", None)
-        if cached is None:
-            cached = TeamEntity(self, None)
-            self._team = cached
-        return cached
-
-    def Team(self, data=None):
-        # Deprecated: use client.team instead.
+    def Team(self, data=None) -> "TeamEntity":
+        """Entity factory: client.Team().list({}) / client.Team().load({"id": ...})."""
         from entity.team_entity import TeamEntity
         return TeamEntity(self, data)
 
 
 
     @classmethod
-    def test(cls, testopts=None, sdkopts=None):
+    def test(cls, testopts=None, sdkopts=None) -> "FreeSportsSDK":
         if sdkopts is None:
             sdkopts = {}
         sdkopts = vs.clone(sdkopts)
@@ -306,3 +266,12 @@ class FreeSportsSDK:
         sdk.mode = "test"
 
         return sdk
+
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from entity.event_entity import EventEntity
+    from entity.league_entity import LeagueEntity
+    from entity.player_entity import PlayerEntity
+    from entity.team_entity import TeamEntity
