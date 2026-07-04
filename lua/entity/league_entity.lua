@@ -81,6 +81,10 @@ end
 
 
 
+---@param reqmatch LeagueListMatch
+---@param ctrl? table
+---@return League[]
+---@return string? err
 function LeagueEntity:list(reqmatch, ctrl)
   local utility = self._utility
   local ctx = utility.make_context({

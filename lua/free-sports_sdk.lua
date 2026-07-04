@@ -244,24 +244,76 @@ end
 
 
 
+-- Idiomatic facade: client:event():list() / client:event():load({ id = ... })
+function FreeSportsSDK:event(data)
+  local EntityMod = require("entity.event_entity")
+  if data == nil then
+    if self._event == nil then
+      self._event = EntityMod.new(self, nil)
+    end
+    return self._event
+  end
+  return EntityMod.new(self, data)
+end
+
+-- Deprecated: use client:event() instead.
 function FreeSportsSDK:Event(data)
   local EntityMod = require("entity.event_entity")
   return EntityMod.new(self, data)
 end
 
 
+-- Idiomatic facade: client:league():list() / client:league():load({ id = ... })
+function FreeSportsSDK:league(data)
+  local EntityMod = require("entity.league_entity")
+  if data == nil then
+    if self._league == nil then
+      self._league = EntityMod.new(self, nil)
+    end
+    return self._league
+  end
+  return EntityMod.new(self, data)
+end
+
+-- Deprecated: use client:league() instead.
 function FreeSportsSDK:League(data)
   local EntityMod = require("entity.league_entity")
   return EntityMod.new(self, data)
 end
 
 
+-- Idiomatic facade: client:player():list() / client:player():load({ id = ... })
+function FreeSportsSDK:player(data)
+  local EntityMod = require("entity.player_entity")
+  if data == nil then
+    if self._player == nil then
+      self._player = EntityMod.new(self, nil)
+    end
+    return self._player
+  end
+  return EntityMod.new(self, data)
+end
+
+-- Deprecated: use client:player() instead.
 function FreeSportsSDK:Player(data)
   local EntityMod = require("entity.player_entity")
   return EntityMod.new(self, data)
 end
 
 
+-- Idiomatic facade: client:team():list() / client:team():load({ id = ... })
+function FreeSportsSDK:team(data)
+  local EntityMod = require("entity.team_entity")
+  if data == nil then
+    if self._team == nil then
+      self._team = EntityMod.new(self, nil)
+    end
+    return self._team
+  end
+  return EntityMod.new(self, data)
+end
+
+-- Deprecated: use client:team() instead.
 function FreeSportsSDK:Team(data)
   local EntityMod = require("entity.team_entity")
   return EntityMod.new(self, data)

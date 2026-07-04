@@ -45,8 +45,7 @@ class PlayerEntityTest < Minitest::Test
       "api_key" => setup[:idmap]["api_key01"],
     }
 
-    player_ref01_list_result, err = player_ref01_ent.list(player_ref01_match, nil)
-    assert_nil err
+    player_ref01_list_result = player_ref01_ent.list(player_ref01_match, nil)
     assert player_ref01_list_result.is_a?(Array)
 
   end

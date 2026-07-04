@@ -14,9 +14,13 @@ import type {
   Control,
 } from '../types'
 
+import type {
+  League,
+  LeagueListMatch,
+} from '../FreeSportsTypes'
 
 // TODO: needs Entity superclass
-class LeagueEntity extends FreeSportsEntityBase {
+class LeagueEntity extends FreeSportsEntityBase<League> {
 
   constructor(client: FreeSportsSDK, entopts: any) {
     super(client, entopts)
@@ -33,7 +37,7 @@ class LeagueEntity extends FreeSportsEntityBase {
 
 
 
-  async list(this: any, reqmatch?: any, ctrl?: Control) {
+  async list(this: any, reqmatch?: LeagueListMatch, ctrl?: Control): Promise<League[]> {
 
     const utility = this._utility
 
@@ -133,7 +137,9 @@ class LeagueEntity extends FreeSportsEntityBase {
         throw err
       }
       else {
-        return undefined
+        // Off-happy-path (throw disabled): typed as any so the method's
+        // Promise<League[]> return stays clean under strict null checks.
+        return undefined as any
       }
     }
   }

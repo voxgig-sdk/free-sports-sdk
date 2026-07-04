@@ -9,12 +9,9 @@ The Lua SDK for the FreeSports API — an entity-oriented client using Lua conve
 
 
 ## Install
-```bash
-luarocks install voxgig-sdk-free-sports
-```
-
-If the module is not yet published, add the source directory to
-your `LUA_PATH`:
+This package is not yet published to LuaRocks. Install it from the
+GitHub release tag (`lua/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/free-sports-sdk/releases)),
+or add the source directory to your `LUA_PATH`:
 
 ```bash
 export LUA_PATH="path/to/lua/?.lua;path/to/lua/?/init.lua;;"
@@ -32,14 +29,14 @@ loading a specific record.
 local sdk = require("free-sports_sdk")
 
 local client = sdk.new({
-  apikey = os.getenv("FREE-SPORTS_APIKEY"),
+  apikey = os.getenv("FREE_SPORTS_APIKEY"),
 })
 ```
 
 ### 2. List events
 
 ```lua
-local result, err = client:Event():list()
+local result, err = client:event():list()
 if err then error(err) end
 
 if type(result) == "table" then
@@ -93,7 +90,7 @@ Create a mock client for unit testing — no server required:
 ```lua
 local client = sdk.test()
 
-local result, err = client:FreeSports():load({ id = "test01" })
+local result, err = client:event():load({ id = "test01" })
 -- result contains mock response data
 ```
 
@@ -126,8 +123,8 @@ local client = sdk.new({
 Create a `.env.local` file at the project root:
 
 ```
-FREE-SPORTS_TEST_LIVE=TRUE
-FREE-SPORTS_APIKEY=<your-key>
+FREE_SPORTS_TEST_LIVE=TRUE
+FREE_SPORTS_APIKEY=<your-key>
 ```
 
 Then run:
@@ -305,7 +302,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.Event()`
+Create an instance: `const event = client.event`
 
 #### Operations
 
@@ -335,13 +332,13 @@ Create an instance: `const event = client.Event()`
 #### Example: List
 
 ```ts
-const events = await client.Event().list()
+const events = await client.event.list()
 ```
 
 
 ### League
 
-Create an instance: `const league = client.League()`
+Create an instance: `const league = client.league`
 
 #### Operations
 
@@ -367,13 +364,13 @@ Create an instance: `const league = client.League()`
 #### Example: List
 
 ```ts
-const leagues = await client.League().list()
+const leagues = await client.league.list()
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.Player()`
+Create an instance: `const player = client.player`
 
 #### Operations
 
@@ -401,13 +398,13 @@ Create an instance: `const player = client.Player()`
 #### Example: List
 
 ```ts
-const players = await client.Player().list()
+const players = await client.player.list()
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.Team()`
+Create an instance: `const team = client.team`
 
 #### Operations
 
@@ -436,7 +433,7 @@ Create an instance: `const team = client.Team()`
 #### Example: List
 
 ```ts
-const teams = await client.Team().list()
+const teams = await client.team.list()
 ```
 
 
@@ -511,11 +508,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```lua
-local moon = client:Moon(nil)
-moon:load({ planet_id = "earth", id = "luna" }, nil)
+local event = client:event()
+event:load({ id = "example_id" })
 
--- moon:data_get() now returns the loaded moon data
--- moon:match_get() returns the last match criteria
+-- event:data_get() now returns the loaded event data
+-- event:match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

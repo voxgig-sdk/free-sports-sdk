@@ -52,8 +52,7 @@ class TeamEntityTest extends TestCase
             "api_key" => $setup["idmap"]["api_key01"],
         ];
 
-        [$team_ref01_list_result, $err] = $team_ref01_ent->list($team_ref01_match, null);
-        $this->assertNull($err);
+        $team_ref01_list_result = $team_ref01_ent->list($team_ref01_match, null);
         $this->assertIsArray($team_ref01_list_result);
 
     }

@@ -52,8 +52,7 @@ class TestEventEntity:
             "api_key": setup["idmap"]["api_key01"],
         }
 
-        event_ref01_list_result, err = event_ref01_ent.list(event_ref01_match, None)
-        assert err is None
+        event_ref01_list_result = event_ref01_ent.list(event_ref01_match, None)
         assert isinstance(event_ref01_list_result, list)
 
 

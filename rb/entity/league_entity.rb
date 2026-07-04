@@ -45,6 +45,7 @@ class LeagueEntity
     end
   end
 
+  # @return [League, Hash] the current League data
   def data_get
     @_utility.feature_hook.call(@_entctx, "GetData")
     VoxgigStruct.clone(@_data)
@@ -57,6 +58,7 @@ class LeagueEntity
     end
   end
 
+  # @return [Hash] the current match filter (any subset of League fields)
   def match_get
     @_utility.feature_hook.call(@_entctx, "GetMatch")
     VoxgigStruct.clone(@_match)
@@ -65,6 +67,11 @@ class LeagueEntity
   
 
   
+  # List League items matching the given filter.
+  #
+  # @param reqmatch [LeagueListMatch, Hash, nil] match filter (any subset of League fields)
+  # @param ctrl [Object, nil] optional per-call control
+  # @return [Array<League>, Array] the matching League items; raises FreeSportsError on failure
   def list(reqmatch, ctrl = nil)
     utility = @_utility
     ctx = utility.make_context.call({

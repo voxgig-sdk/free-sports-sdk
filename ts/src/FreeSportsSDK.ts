@@ -5,6 +5,8 @@ import { LeagueEntity } from './entity/LeagueEntity'
 import { PlayerEntity } from './entity/PlayerEntity'
 import { TeamEntity } from './entity/TeamEntity'
 
+export type * from './FreeSportsTypes'
+
 
 import { inspect } from 'node:util'
 
@@ -205,24 +207,56 @@ class FreeSportsSDK {
 
 
 
+  _event?: EventEntity
+
+  // Idiomatic facade: `client.event.list()` / `client.event.load({ id })`.
+  get event(): EventEntity {
+    return (this._event ??= new EventEntity(this, undefined))
+  }
+
+  /** @deprecated Use `client.event` instead. */
   Event(data?: any) {
     const self = this
     return new EventEntity(self,data)
   }
 
 
+  _league?: LeagueEntity
+
+  // Idiomatic facade: `client.league.list()` / `client.league.load({ id })`.
+  get league(): LeagueEntity {
+    return (this._league ??= new LeagueEntity(this, undefined))
+  }
+
+  /** @deprecated Use `client.league` instead. */
   League(data?: any) {
     const self = this
     return new LeagueEntity(self,data)
   }
 
 
+  _player?: PlayerEntity
+
+  // Idiomatic facade: `client.player.list()` / `client.player.load({ id })`.
+  get player(): PlayerEntity {
+    return (this._player ??= new PlayerEntity(this, undefined))
+  }
+
+  /** @deprecated Use `client.player` instead. */
   Player(data?: any) {
     const self = this
     return new PlayerEntity(self,data)
   }
 
 
+  _team?: TeamEntity
+
+  // Idiomatic facade: `client.team.list()` / `client.team.load({ id })`.
+  get team(): TeamEntity {
+    return (this._team ??= new TeamEntity(this, undefined))
+  }
+
+  /** @deprecated Use `client.team` instead. */
   Team(data?: any) {
     const self = this
     return new TeamEntity(self,data)

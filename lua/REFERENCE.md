@@ -96,7 +96,7 @@ same parameters as `direct()`.
 ## EventEntity
 
 ```lua
-local event = client:Event(nil)
+local event = client:event(nil)
 ```
 
 ### Fields
@@ -125,7 +125,7 @@ local event = client:Event(nil)
 List entities matching the given criteria. Returns an array.
 
 ```lua
-local results, err = client:Event():list()
+local results, err = client:event():list()
 ```
 
 ### Common Methods
@@ -161,7 +161,7 @@ Return the entity name.
 ## LeagueEntity
 
 ```lua
-local league = client:League(nil)
+local league = client:league(nil)
 ```
 
 ### Fields
@@ -186,7 +186,7 @@ local league = client:League(nil)
 List entities matching the given criteria. Returns an array.
 
 ```lua
-local results, err = client:League():list()
+local results, err = client:league():list()
 ```
 
 ### Common Methods
@@ -222,7 +222,7 @@ Return the entity name.
 ## PlayerEntity
 
 ```lua
-local player = client:Player(nil)
+local player = client:player(nil)
 ```
 
 ### Fields
@@ -249,7 +249,7 @@ local player = client:Player(nil)
 List entities matching the given criteria. Returns an array.
 
 ```lua
-local results, err = client:Player():list()
+local results, err = client:player():list()
 ```
 
 ### Common Methods
@@ -285,7 +285,7 @@ Return the entity name.
 ## TeamEntity
 
 ```lua
-local team = client:Team(nil)
+local team = client:team(nil)
 ```
 
 ### Fields
@@ -313,7 +313,7 @@ local team = client:Team(nil)
 List entities matching the given criteria. Returns an array.
 
 ```lua
-local results, err = client:Team():list()
+local results, err = client:team():list()
 ```
 
 ### Common Methods

@@ -144,16 +144,23 @@ class FreeSportsSDK:
 
         _, err = utility.prepare_auth(ctx)
         if err is not None:
-            return None, err
+            raise err
 
-        return utility.make_fetch_def(ctx)
+        fetchdef, err = utility.make_fetch_def(ctx)
+        if err is not None:
+            raise err
+
+        return fetchdef
 
     def direct(self, fetchargs=None):
         utility = self._utility
 
-        fetchdef, err = self.prepare(fetchargs)
-        if err is not None:
-            return {"ok": False, "err": err}, None
+        try:
+            fetchdef = self.prepare(fetchargs)
+        except Exception as err:
+            # direct() is the raw-HTTP escape hatch: it never raises, it
+            # returns a result object callers branch on via result["ok"].
+            return {"ok": False, "err": err}
 
         if fetchargs is None:
             fetchargs = {}
@@ -170,13 +177,13 @@ class FreeSportsSDK:
         fetched, fetch_err = utility.fetcher(ctx, url, fetchdef)
 
         if fetch_err is not None:
-            return {"ok": False, "err": fetch_err}, None
+            return {"ok": False, "err": fetch_err}
 
         if fetched is None:
             return {
                 "ok": False,
                 "err": ctx.make_error("direct_no_response", "response: undefined"),
-            }, None
+            }
 
         if isinstance(fetched, dict):
             status = helpers.to_int(vs.getprop(fetched, "status"))
@@ -205,30 +212,74 @@ class FreeSportsSDK:
                 "status": status,
                 "headers": headers,
                 "data": json_data,
-            }, None
+            }
 
         return {
             "ok": False,
             "err": ctx.make_error("direct_invalid", "invalid response type"),
-        }, None
+        }
 
+
+    @property
+    def event(self):
+        """Idiomatic facade: client.event.list() / client.event.load({"id": ...})."""
+        from entity.event_entity import EventEntity
+        cached = getattr(self, "_event", None)
+        if cached is None:
+            cached = EventEntity(self, None)
+            self._event = cached
+        return cached
 
     def Event(self, data=None):
+        # Deprecated: use client.event instead.
         from entity.event_entity import EventEntity
         return EventEntity(self, data)
 
 
+    @property
+    def league(self):
+        """Idiomatic facade: client.league.list() / client.league.load({"id": ...})."""
+        from entity.league_entity import LeagueEntity
+        cached = getattr(self, "_league", None)
+        if cached is None:
+            cached = LeagueEntity(self, None)
+            self._league = cached
+        return cached
+
     def League(self, data=None):
+        # Deprecated: use client.league instead.
         from entity.league_entity import LeagueEntity
         return LeagueEntity(self, data)
 
 
+    @property
+    def player(self):
+        """Idiomatic facade: client.player.list() / client.player.load({"id": ...})."""
+        from entity.player_entity import PlayerEntity
+        cached = getattr(self, "_player", None)
+        if cached is None:
+            cached = PlayerEntity(self, None)
+            self._player = cached
+        return cached
+
     def Player(self, data=None):
+        # Deprecated: use client.player instead.
         from entity.player_entity import PlayerEntity
         return PlayerEntity(self, data)
 
 
+    @property
+    def team(self):
+        """Idiomatic facade: client.team.list() / client.team.load({"id": ...})."""
+        from entity.team_entity import TeamEntity
+        cached = getattr(self, "_team", None)
+        if cached is None:
+            cached = TeamEntity(self, None)
+            self._team = cached
+        return cached
+
     def Team(self, data=None):
+        # Deprecated: use client.team instead.
         from entity.team_entity import TeamEntity
         return TeamEntity(self, data)
 

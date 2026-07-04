@@ -152,6 +152,7 @@ class FreeSportsConfig
                         'orig' => 'api_key',
                         'reqd' => true,
                         'type' => '`$STRING`',
+                        'index$' => 0,
                       ],
                     ],
                     'query' => [
@@ -286,6 +287,7 @@ class FreeSportsConfig
                         'orig' => 'api_key',
                         'reqd' => true,
                         'type' => '`$STRING`',
+                        'index$' => 0,
                       ],
                     ],
                     'query' => [
@@ -333,6 +335,7 @@ class FreeSportsConfig
                         'orig' => 'api_key',
                         'reqd' => true,
                         'type' => '`$STRING`',
+                        'index$' => 0,
                       ],
                     ],
                   ],
@@ -470,6 +473,7 @@ class FreeSportsConfig
                         'orig' => 'api_key',
                         'reqd' => true,
                         'type' => '`$STRING`',
+                        'index$' => 0,
                       ],
                     ],
                     'query' => [
@@ -625,6 +629,7 @@ class FreeSportsConfig
                         'orig' => 'api_key',
                         'reqd' => true,
                         'type' => '`$STRING`',
+                        'index$' => 0,
                       ],
                     ],
                     'query' => [

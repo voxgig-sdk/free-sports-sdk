@@ -52,8 +52,7 @@ class TestLeagueEntity:
             "api_key": setup["idmap"]["api_key01"],
         }
 
-        league_ref01_list_result, err = league_ref01_ent.list(league_ref01_match, None)
-        assert err is None
+        league_ref01_list_result = league_ref01_ent.list(league_ref01_match, None)
         assert isinstance(league_ref01_list_result, list)
 
 

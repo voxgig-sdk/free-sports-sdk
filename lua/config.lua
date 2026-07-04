@@ -146,6 +146,7 @@ local function make_config()
                       ["orig"] = "api_key",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
+                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
@@ -280,6 +281,7 @@ local function make_config()
                       ["orig"] = "api_key",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
+                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
@@ -327,6 +329,7 @@ local function make_config()
                       ["orig"] = "api_key",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
+                      ["index$"] = 0,
                     },
                   },
                 },
@@ -464,6 +467,7 @@ local function make_config()
                       ["orig"] = "api_key",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
+                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
@@ -619,6 +623,7 @@ local function make_config()
                       ["orig"] = "api_key",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
+                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {

@@ -13,6 +13,9 @@ require_relative 'config'
 require_relative 'feature/base_feature'
 require_relative 'features'
 
+# Load typed models (Struct value objects).
+require_relative 'FreeSports_types'
+
 
 class FreeSportsSDK
   attr_accessor :mode, :features, :options
@@ -131,7 +134,7 @@ class FreeSportsSDK
     end
 
     _, err = utility.prepare_auth.call(ctx)
-    return nil, err if err
+    raise err if err
 
     utility.make_fetch_def.call(ctx)
   end
@@ -139,8 +142,14 @@ class FreeSportsSDK
   def direct(fetchargs = {})
     utility = @_utility
 
-    fetchdef, err = prepare(fetchargs)
-    return { "ok" => false, "err" => err }, nil if err
+    # direct() is the raw-HTTP escape hatch: it always returns a result hash
+    # ({ "ok" => ..., ... }) and never raises. prepare() raises on error, so
+    # trap that and surface it in the hash.
+    begin
+      fetchdef = prepare(fetchargs)
+    rescue FreeSportsError => err
+      return { "ok" => false, "err" => err }
+    end
 
     fetchargs ||= {}
     ctrl = FreeSportsHelpers.to_map(VoxgigStruct.getprop(fetchargs, "ctrl")) || {}
@@ -153,13 +162,13 @@ class FreeSportsSDK
     url = fetchdef["url"] || ""
     fetched, fetch_err = utility.fetcher.call(ctx, url, fetchdef)
 
-    return { "ok" => false, "err" => fetch_err }, nil if fetch_err
+    return { "ok" => false, "err" => fetch_err } if fetch_err
 
     if fetched.nil?
       return {
         "ok" => false,
         "err" => ctx.make_error("direct_no_response", "response: undefined"),
-      }, nil
+      }
     end
 
     if fetched.is_a?(Hash)
@@ -189,34 +198,62 @@ class FreeSportsSDK
         "status" => status,
         "headers" => headers,
         "data" => json_data,
-      }, nil
+      }
     end
 
     return {
       "ok" => false,
       "err" => ctx.make_error("direct_invalid", "invalid response type"),
-    }, nil
+    }
   end
 
 
+  # Idiomatic facade: client.event.list / client.event.load({ "id" => ... })
+  def event
+    require_relative 'entity/event_entity'
+    @event ||= EventEntity.new(self, nil)
+  end
+
+  # Deprecated: use client.event instead.
   def Event(data = nil)
     require_relative 'entity/event_entity'
     EventEntity.new(self, data)
   end
 
 
+  # Idiomatic facade: client.league.list / client.league.load({ "id" => ... })
+  def league
+    require_relative 'entity/league_entity'
+    @league ||= LeagueEntity.new(self, nil)
+  end
+
+  # Deprecated: use client.league instead.
   def League(data = nil)
     require_relative 'entity/league_entity'
     LeagueEntity.new(self, data)
   end
 
 
+  # Idiomatic facade: client.player.list / client.player.load({ "id" => ... })
+  def player
+    require_relative 'entity/player_entity'
+    @player ||= PlayerEntity.new(self, nil)
+  end
+
+  # Deprecated: use client.player instead.
   def Player(data = nil)
     require_relative 'entity/player_entity'
     PlayerEntity.new(self, data)
   end
 
 
+  # Idiomatic facade: client.team.list / client.team.load({ "id" => ... })
+  def team
+    require_relative 'entity/team_entity'
+    @team ||= TeamEntity.new(self, nil)
+  end
+
+  # Deprecated: use client.team instead.
   def Team(data = nil)
     require_relative 'entity/team_entity'
     TeamEntity.new(self, data)

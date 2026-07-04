@@ -45,8 +45,7 @@ class EventEntityTest < Minitest::Test
       "api_key" => setup[:idmap]["api_key01"],
     }
 
-    event_ref01_list_result, err = event_ref01_ent.list(event_ref01_match, nil)
-    assert_nil err
+    event_ref01_list_result = event_ref01_ent.list(event_ref01_match, nil)
     assert event_ref01_list_result.is_a?(Array)
 
   end

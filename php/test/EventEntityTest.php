@@ -52,8 +52,7 @@ class EventEntityTest extends TestCase
             "api_key" => $setup["idmap"]["api_key01"],
         ];
 
-        [$event_ref01_list_result, $err] = $event_ref01_ent->list($event_ref01_match, null);
-        $this->assertNull($err);
+        $event_ref01_list_result = $event_ref01_ent->list($event_ref01_match, null);
         $this->assertIsArray($event_ref01_list_result);
 
     }

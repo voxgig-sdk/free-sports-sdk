@@ -146,6 +146,7 @@ func MakeConfig() map[string]any {
 											"orig": "api_key",
 											"reqd": true,
 											"type": "`$STRING`",
+											"index$": 0,
 										},
 									},
 									"query": []any{
@@ -280,6 +281,7 @@ func MakeConfig() map[string]any {
 											"orig": "api_key",
 											"reqd": true,
 											"type": "`$STRING`",
+											"index$": 0,
 										},
 									},
 									"query": []any{
@@ -327,6 +329,7 @@ func MakeConfig() map[string]any {
 											"orig": "api_key",
 											"reqd": true,
 											"type": "`$STRING`",
+											"index$": 0,
 										},
 									},
 								},
@@ -464,6 +467,7 @@ func MakeConfig() map[string]any {
 											"orig": "api_key",
 											"reqd": true,
 											"type": "`$STRING`",
+											"index$": 0,
 										},
 									},
 									"query": []any{
@@ -619,6 +623,7 @@ func MakeConfig() map[string]any {
 											"orig": "api_key",
 											"reqd": true,
 											"type": "`$STRING`",
+											"index$": 0,
 										},
 									},
 									"query": []any{

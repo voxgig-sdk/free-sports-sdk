@@ -182,7 +182,8 @@ class Config {
                     "name": "api_key",
                     "orig": "api_key",
                     "reqd": true,
-                    "type": "`$STRING`"
+                    "type": "`$STRING`",
+                    "index$": 0
                   }
                 ],
                 "query": [
@@ -316,7 +317,8 @@ class Config {
                     "name": "api_key",
                     "orig": "api_key",
                     "reqd": true,
-                    "type": "`$STRING`"
+                    "type": "`$STRING`",
+                    "index$": 0
                   }
                 ],
                 "query": [
@@ -363,7 +365,8 @@ class Config {
                     "name": "api_key",
                     "orig": "api_key",
                     "reqd": true,
-                    "type": "`$STRING`"
+                    "type": "`$STRING`",
+                    "index$": 0
                   }
                 ]
               },
@@ -500,7 +503,8 @@ class Config {
                     "name": "api_key",
                     "orig": "api_key",
                     "reqd": true,
-                    "type": "`$STRING`"
+                    "type": "`$STRING`",
+                    "index$": 0
                   }
                 ],
                 "query": [
@@ -655,7 +659,8 @@ class Config {
                     "name": "api_key",
                     "orig": "api_key",
                     "reqd": true,
-                    "type": "`$STRING`"
+                    "type": "`$STRING`",
+                    "index$": 0
                   }
                 ],
                 "query": [

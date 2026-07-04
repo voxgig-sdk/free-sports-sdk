@@ -9,9 +9,10 @@ The PHP SDK for the FreeSports API — an entity-oriented client using PHP conve
 
 
 ## Install
-```bash
-composer require voxgig-sdk/free-sports
-```
+This package is not yet published to Packagist. Install it from the
+GitHub release tag (`php/vX.Y.Z`):
+
+- Releases: [https://github.com/voxgig-sdk/free-sports-sdk/releases](https://github.com/voxgig-sdk/free-sports-sdk/releases)
 
 
 ## Tutorial: your first API call
@@ -26,21 +27,23 @@ loading a specific record.
 require_once 'freesports_sdk.php';
 
 $client = new FreeSportsSDK([
-    "apikey" => getenv("FREE-SPORTS_APIKEY"),
+    "apikey" => getenv("FREE_SPORTS_APIKEY"),
 ]);
 ```
 
 ### 2. List events
 
 ```php
-[$result, $err] = $client->Event()->list();
-if ($err) { throw new \Exception($err); }
-
-if (is_array($result)) {
-    foreach ($result as $item) {
-        $d = $item->data_get();
-        echo $d["id"] . " " . $d["name"] . "\n";
+try {
+    $result = $client->event()->list();
+    if (is_array($result)) {
+        foreach ($result as $item) {
+            $d = $item->data_get();
+            echo $d["id"] . " " . $d["name"] . "\n";
+        }
     }
+} catch (\Exception $err) {
+    echo "Error: " . $err->getMessage();
 }
 ```
 
@@ -52,28 +55,31 @@ if (is_array($result)) {
 For endpoints not covered by entity methods:
 
 ```php
-[$result, $err] = $client->direct([
+// direct() is the raw-HTTP escape hatch: it returns a result array
+// (it does not throw). Branch on $result["ok"].
+$result = $client->direct([
     "path" => "/api/resource/{id}",
     "method" => "GET",
     "params" => ["id" => "example"],
 ]);
-if ($err) { throw new \Exception($err); }
 
 if ($result["ok"]) {
     echo $result["status"];  // 200
     print_r($result["data"]);  // response body
+} else {
+    echo "Error: " . $result["err"]->getMessage();
 }
 ```
 
 ### Prepare a request without sending it
 
 ```php
-[$fetchdef, $err] = $client->prepare([
+// prepare() throws on error and returns the fetch definition.
+$fetchdef = $client->prepare([
     "path" => "/api/resource/{id}",
     "method" => "DELETE",
     "params" => ["id" => "example"],
 ]);
-if ($err) { throw new \Exception($err); }
 
 echo $fetchdef["url"];
 echo $fetchdef["method"];
@@ -87,7 +93,7 @@ Create a mock client for unit testing — no server required:
 ```php
 $client = FreeSportsSDK::test();
 
-[$result, $err] = $client->FreeSports()->load(["id" => "test01"]);
+$result = $client->event()->load(["id" => "test01"]);
 // $result contains mock response data
 ```
 
@@ -121,8 +127,8 @@ $client = new FreeSportsSDK([
 Create a `.env.local` file at the project root:
 
 ```
-FREE-SPORTS_TEST_LIVE=TRUE
-FREE-SPORTS_APIKEY=<your-key>
+FREE_SPORTS_TEST_LIVE=TRUE
+FREE_SPORTS_APIKEY=<your-key>
 ```
 
 Then run:
@@ -194,8 +200,12 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return `[$result, $err]`. The first value is an
-`array` with these keys:
+Entity operations return the bare result data (an `array` for single-entity
+ops, a `list` for `list`) and throw on error. Wrap calls in
+`try`/`catch` to handle failures.
+
+The `direct()` escape hatch never throws — it returns a result `array`
+you branch on via `$result["ok"]`:
 
 | Key | Type | Description |
 | --- | --- | --- |
@@ -300,7 +310,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.Event()`
+Create an instance: `const event = client.event`
 
 #### Operations
 
@@ -330,13 +340,13 @@ Create an instance: `const event = client.Event()`
 #### Example: List
 
 ```ts
-const events = await client.Event().list()
+const events = await client.event.list()
 ```
 
 
 ### League
 
-Create an instance: `const league = client.League()`
+Create an instance: `const league = client.league`
 
 #### Operations
 
@@ -362,13 +372,13 @@ Create an instance: `const league = client.League()`
 #### Example: List
 
 ```ts
-const leagues = await client.League().list()
+const leagues = await client.league.list()
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.Player()`
+Create an instance: `const player = client.player`
 
 #### Operations
 
@@ -396,13 +406,13 @@ Create an instance: `const player = client.Player()`
 #### Example: List
 
 ```ts
-const players = await client.Player().list()
+const players = await client.player.list()
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.Team()`
+Create an instance: `const team = client.team`
 
 #### Operations
 
@@ -431,7 +441,7 @@ Create an instance: `const team = client.Team()`
 #### Example: List
 
 ```ts
-const teams = await client.Team().list()
+const teams = await client.team.list()
 ```
 
 
@@ -506,11 +516,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```php
-$moon = $client->Moon();
-[$result, $err] = $moon->load(["planet_id" => "earth", "id" => "luna"]);
+$event = $client->event();
+$event->load(["id" => "example_id"]);
 
-// $moon->dataGet() now returns the loaded moon data
-// $moon->matchGet() returns the last match criteria
+// $event->dataGet() now returns the loaded event data
+// $event->matchGet() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

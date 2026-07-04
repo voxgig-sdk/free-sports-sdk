@@ -52,8 +52,7 @@ class LeagueEntityTest extends TestCase
             "api_key" => $setup["idmap"]["api_key01"],
         ];
 
-        [$league_ref01_list_result, $err] = $league_ref01_ent->list($league_ref01_match, null);
-        $this->assertNull($err);
+        $league_ref01_list_result = $league_ref01_ent->list($league_ref01_match, null);
         $this->assertIsArray($league_ref01_list_result);
 
     }

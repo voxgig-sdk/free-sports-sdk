@@ -9,9 +9,12 @@ The TypeScript SDK for the FreeSports API — a type-safe, entity-oriented clien
 
 
 ## Install
-```bash
-npm install @voxgig-sdk/free-sports
-```
+This package is not yet published to npm. Install it from the GitHub
+release tag (`ts/vX.Y.Z`):
+
+- Releases: [https://github.com/voxgig-sdk/free-sports-sdk/releases](https://github.com/voxgig-sdk/free-sports-sdk/releases)
+
+
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
@@ -20,17 +23,17 @@ loading a specific record.
 ### 1. Create a client
 
 ```ts
-import { FreeSportsSDK } from 'free-sports'
+import { FreeSportsSDK } from '@voxgig-sdk/free-sports'
 
 const client = new FreeSportsSDK({
-  apikey: process.env.FREE-SPORTS_APIKEY,
+  apikey: process.env.FREE_SPORTS_APIKEY,
 })
 ```
 
 ### 2. List events
 
 ```ts
-const result = await client.Event().list()
+const result = await client.event.list()
 
 if (result.ok) {
   for (const item of result.data) {
@@ -81,7 +84,7 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = FreeSportsSDK.test()
 
-const result = await client.Planet().load({ id: 'test01' })
+const result = await client.event.load({ id: 'test01' })
 // result.ok === true
 // result.data contains mock response data
 ```
@@ -98,7 +101,7 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.Planet()
+const entity = client.event
 
 // First call sets internal match
 await entity.load({ id: 'example' })
@@ -135,8 +138,8 @@ const client = new FreeSportsSDK({
 Create a `.env.local` file at the project root:
 
 ```
-FREE-SPORTS_TEST_LIVE=TRUE
-FREE-SPORTS_APIKEY=<your-key>
+FREE_SPORTS_TEST_LIVE=TRUE
+FREE_SPORTS_APIKEY=<your-key>
 ```
 
 Then run:
@@ -346,7 +349,7 @@ API path: `/{apiKey}/searchteams.php`
 
 ### Event
 
-Create an instance: `const event = client.Event()`
+Create an instance: `const event = client.event`
 
 #### Operations
 
@@ -376,13 +379,13 @@ Create an instance: `const event = client.Event()`
 #### Example: List
 
 ```ts
-const events = await client.Event().list()
+const events = await client.event.list()
 ```
 
 
 ### League
 
-Create an instance: `const league = client.League()`
+Create an instance: `const league = client.league`
 
 #### Operations
 
@@ -408,13 +411,13 @@ Create an instance: `const league = client.League()`
 #### Example: List
 
 ```ts
-const leagues = await client.League().list()
+const leagues = await client.league.list()
 ```
 
 
 ### Player
 
-Create an instance: `const player = client.Player()`
+Create an instance: `const player = client.player`
 
 #### Operations
 
@@ -442,13 +445,13 @@ Create an instance: `const player = client.Player()`
 #### Example: List
 
 ```ts
-const players = await client.Player().list()
+const players = await client.player.list()
 ```
 
 
 ### Team
 
-Create an instance: `const team = client.Team()`
+Create an instance: `const team = client.team`
 
 #### Operations
 
@@ -477,7 +480,7 @@ Create an instance: `const team = client.Team()`
 #### Example: List
 
 ```ts
-const teams = await client.Team().list()
+const teams = await client.team.list()
 ```
 
 
@@ -538,7 +541,7 @@ free-sports/
 Import the SDK from the package root:
 
 ```ts
-import { FreeSportsSDK } from 'free-sports'
+import { FreeSportsSDK } from '@voxgig-sdk/free-sports'
 ```
 
 ### Entity state
@@ -548,11 +551,11 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const moon = client.Moon()
-await moon.load({ planet_id: 'earth', id: 'luna' })
+const event = client.event
+await event.load({ id: "example_id" })
 
-// moon.data() now returns the loaded moon data
-// moon.match() returns { planet_id: 'earth', id: 'luna' }
+// event.data() now returns the loaded event data
+// event.match() returns { id: "example_id" }
 ```
 
 Call `make()` to create a fresh instance with the same configuration

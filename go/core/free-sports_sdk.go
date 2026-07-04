@@ -245,21 +245,33 @@ func (sdk *FreeSportsSDK) Direct(fetchargs map[string]any) (map[string]any, erro
 }
 
 
+// Event returns a Event entity bound to this client.
+// Idiomatic usage: client.Event(nil).List(nil, nil) or
+// client.Event(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *FreeSportsSDK) Event(data map[string]any) FreeSportsEntity {
 	return NewEventEntityFunc(sdk, data)
 }
 
 
+// League returns a League entity bound to this client.
+// Idiomatic usage: client.League(nil).List(nil, nil) or
+// client.League(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *FreeSportsSDK) League(data map[string]any) FreeSportsEntity {
 	return NewLeagueEntityFunc(sdk, data)
 }
 
 
+// Player returns a Player entity bound to this client.
+// Idiomatic usage: client.Player(nil).List(nil, nil) or
+// client.Player(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *FreeSportsSDK) Player(data map[string]any) FreeSportsEntity {
 	return NewPlayerEntityFunc(sdk, data)
 }
 
 
+// Team returns a Team entity bound to this client.
+// Idiomatic usage: client.Team(nil).List(nil, nil) or
+// client.Team(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *FreeSportsSDK) Team(data map[string]any) FreeSportsEntity {
 	return NewTeamEntityFunc(sdk, data)
 }
