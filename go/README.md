@@ -4,6 +4,8 @@
 
 The Golang SDK for the FreeSports API — an entity-oriented client using standard Go conventions. No generics required; data flows as `map[string]any`.
 
+It exposes the API as capitalised, semantic **Entities** — e.g. `client.Event(nil)` — each with the same small set of operations (`List`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
+
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
 
@@ -63,6 +65,35 @@ func main() {
 ```
 
 
+## Error handling
+
+Every entity operation returns `(value, error)`. Check `err` before
+using the value — there is no exception to catch:
+
+```go
+events, err := client.Event(nil).List(nil, nil)
+if err != nil {
+    // handle err
+    return
+}
+_ = events
+```
+
+`Direct` follows the same `(value, error)` convention:
+
+```go
+result, err := client.Direct(map[string]any{
+    "path":   "/api/resource/{id}",
+    "method": "GET",
+    "params": map[string]any{"id": "example_id"},
+})
+if err != nil {
+    // handle err
+}
+_ = result
+```
+
+
 ## How-to guides
 
 ### Make a direct HTTP request
@@ -109,13 +140,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-event, err := client.Event(nil).Load(
-    map[string]any{"id": "test01"}, nil,
+event, err := client.Event(nil).List(
+    nil, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(event) // the loaded mock data
+fmt.Println(event) // the returned mock data
 ```
 
 ### Use a custom fetch function
@@ -205,11 +236,7 @@ All entities implement the `FreeSportsEntity` interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria. |
 | `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria. |
-| `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity. |
-| `Update` | `(reqdata, ctrl map[string]any) (any, error)` | Update an existing entity. |
-| `Remove` | `(reqmatch, ctrl map[string]any) (any, error)` | Remove an entity. |
 | `Data` | `(args ...any) any` | Get or set entity data. |
 | `Match` | `(args ...any) any` | Get or set entity match criteria. |
 | `Make` | `() Entity` | Create a new instance with the same options. |
@@ -222,16 +249,15 @@ operation's data **directly** — there is no wrapper:
 
 | Operation | `value` |
 | --- | --- |
-| `Load` / `Create` / `Update` / `Remove` | the entity record (`map[string]any`) |
 | `List` | a `[]any` of entity records |
 
 Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    event, err := client.Event(nil).Load(map[string]any{"id": "example_id"}, nil)
+    event, err := client.Event(nil).List(map[string]any{/* fields */}, nil)
     if err != nil { /* handle */ }
-    // event is the loaded record
+    // event is the returned record
 
 Only `Direct()` returns a response envelope — a `map[string]any` with
 `"ok"`, `"status"`, `"headers"`, and `"data"` keys.
@@ -342,20 +368,20 @@ Create an instance: `event := client.Event(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_event` | ``$STRING`` |  |
-| `id_event` | ``$STRING`` |  |
-| `int_away_score` | ``$STRING`` |  |
-| `int_home_score` | ``$STRING`` |  |
-| `str_away_team` | ``$STRING`` |  |
-| `str_event` | ``$STRING`` |  |
-| `str_home_team` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_status` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_time` | ``$STRING`` |  |
-| `str_venue` | ``$STRING`` |  |
-| `str_video` | ``$STRING`` |  |
+| `date_event` | `string` |  |
+| `id_event` | `string` |  |
+| `int_away_score` | `string` |  |
+| `int_home_score` | `string` |  |
+| `str_away_team` | `string` |  |
+| `str_event` | `string` |  |
+| `str_home_team` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_status` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_time` | `string` |  |
+| `str_venue` | `string` |  |
+| `str_video` | `string` |  |
 
 #### Example: List
 
@@ -382,16 +408,16 @@ Create an instance: `league := client.League(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_league` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `str_badge` | ``$STRING`` |  |
-| `str_country` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_league_alternate` | ``$STRING`` |  |
-| `str_logo` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_league` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `str_badge` | `string` |  |
+| `str_country` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_league_alternate` | `string` |  |
+| `str_logo` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -418,18 +444,18 @@ Create an instance: `player := client.Player(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_born` | ``$STRING`` |  |
-| `id_player` | ``$STRING`` |  |
-| `str_cutout` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_height` | ``$STRING`` |  |
-| `str_nationality` | ``$STRING`` |  |
-| `str_player` | ``$STRING`` |  |
-| `str_position` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_weight` | ``$STRING`` |  |
+| `date_born` | `string` |  |
+| `id_player` | `string` |  |
+| `str_cutout` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_height` | `string` |  |
+| `str_nationality` | `string` |  |
+| `str_player` | `string` |  |
+| `str_position` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_team` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_weight` | `string` |  |
 
 #### Example: List
 
@@ -456,19 +482,19 @@ Create an instance: `team := client.Team(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_team` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `int_stadium_capacity` | ``$STRING`` |  |
-| `str_alternate` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_stadium` | ``$STRING`` |  |
-| `str_stadium_location` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_team_badge` | ``$STRING`` |  |
-| `str_team_jersey` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_team` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `int_stadium_capacity` | `string` |  |
+| `str_alternate` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_stadium` | `string` |  |
+| `str_stadium_location` | `string` |  |
+| `str_team` | `string` |  |
+| `str_team_badge` | `string` |  |
+| `str_team_jersey` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -481,12 +507,16 @@ fmt.Println(teams) // the array of records
 ```
 
 
-## Explanation
+## Advanced
+
+> The sections above cover everyday use. The material below explains the
+> SDK's internals — useful when extending it with custom features, but not
+> needed for normal use.
 
 ### The operation pipeline
 
-Every entity operation (load, list, create, update, remove) follows a
-six-stage pipeline. Each stage fires a feature hook before executing:
+Every entity operation follows a six-stage pipeline. Each stage fires a
+feature hook before executing:
 
 ```
 PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
@@ -503,9 +533,9 @@ PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
 - **PreDone**: Final stage before returning to the caller. Entity
   state (match, data) is updated here.
 
-If any stage returns an error, the pipeline short-circuits and the
-error is returned to the caller. An unexpected panic triggers the
-`PreUnexpected` hook.
+If any stage errors, the pipeline short-circuits and the error surfaces
+to the caller — see [Error handling](#error-handling) for how that looks
+in this language.
 
 ### Features and hooks
 
@@ -546,14 +576,14 @@ like `core.ToMapAny`.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `Load`, the entity
+Entity instances are stateful. After a successful `List`, the entity
 stores the returned data and match criteria internally.
 
 ```go
 event := client.Event(nil)
-event.Load(map[string]any{"id": "example_id"}, nil)
+event.List(nil, nil)
 
-// event.Data() now returns the loaded event data
+// event.Data() now returns the event data from the last list
 // event.Match() returns the last match criteria
 ```
 

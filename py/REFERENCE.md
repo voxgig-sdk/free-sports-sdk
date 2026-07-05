@@ -8,7 +8,7 @@ Complete API reference for the FreeSports Python SDK.
 ### Constructor
 
 ```python
-from free-sports_sdk import FreeSportsSDK
+from freesports_sdk import FreeSportsSDK
 
 client = FreeSportsSDK(options)
 ```
@@ -100,29 +100,29 @@ event = client.Event()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `date_event` | ``$STRING`` | No |  |
-| `id_event` | ``$STRING`` | No |  |
-| `int_away_score` | ``$STRING`` | No |  |
-| `int_home_score` | ``$STRING`` | No |  |
-| `str_away_team` | ``$STRING`` | No |  |
-| `str_event` | ``$STRING`` | No |  |
-| `str_home_team` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_status` | ``$STRING`` | No |  |
-| `str_thumb` | ``$STRING`` | No |  |
-| `str_time` | ``$STRING`` | No |  |
-| `str_venue` | ``$STRING`` | No |  |
-| `str_video` | ``$STRING`` | No |  |
+| `date_event` | `str` | No |  |
+| `id_event` | `str` | No |  |
+| `int_away_score` | `str` | No |  |
+| `int_home_score` | `str` | No |  |
+| `str_away_team` | `str` | No |  |
+| `str_event` | `str` | No |  |
+| `str_home_team` | `str` | No |  |
+| `str_league` | `str` | No |  |
+| `str_sport` | `str` | No |  |
+| `str_status` | `str` | No |  |
+| `str_thumb` | `str` | No |  |
+| `str_time` | `str` | No |  |
+| `str_venue` | `str` | No |  |
+| `str_video` | `str` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl=None) -> list`
+#### `list(reqmatch=None, ctrl=None) -> list`
 
-List entities matching the given criteria. Returns a list and raises on error.
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.Event().list({})
+results = client.Event().list()
 for event in results:
     print(event)
 ```
@@ -166,25 +166,25 @@ league = client.League()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `id_league` | ``$STRING`` | No |  |
-| `int_formed_year` | ``$STRING`` | No |  |
-| `str_badge` | ``$STRING`` | No |  |
-| `str_country` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_league_alternate` | ``$STRING`` | No |  |
-| `str_logo` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_website` | ``$STRING`` | No |  |
+| `id_league` | `str` | No |  |
+| `int_formed_year` | `str` | No |  |
+| `str_badge` | `str` | No |  |
+| `str_country` | `str` | No |  |
+| `str_description_en` | `str` | No |  |
+| `str_league` | `str` | No |  |
+| `str_league_alternate` | `str` | No |  |
+| `str_logo` | `str` | No |  |
+| `str_sport` | `str` | No |  |
+| `str_website` | `str` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl=None) -> list`
+#### `list(reqmatch=None, ctrl=None) -> list`
 
-List entities matching the given criteria. Returns a list and raises on error.
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.League().list({})
+results = client.League().list()
 for league in results:
     print(league)
 ```
@@ -228,27 +228,27 @@ player = client.Player()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `date_born` | ``$STRING`` | No |  |
-| `id_player` | ``$STRING`` | No |  |
-| `str_cutout` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_height` | ``$STRING`` | No |  |
-| `str_nationality` | ``$STRING`` | No |  |
-| `str_player` | ``$STRING`` | No |  |
-| `str_position` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_team` | ``$STRING`` | No |  |
-| `str_thumb` | ``$STRING`` | No |  |
-| `str_weight` | ``$STRING`` | No |  |
+| `date_born` | `str` | No |  |
+| `id_player` | `str` | No |  |
+| `str_cutout` | `str` | No |  |
+| `str_description_en` | `str` | No |  |
+| `str_height` | `str` | No |  |
+| `str_nationality` | `str` | No |  |
+| `str_player` | `str` | No |  |
+| `str_position` | `str` | No |  |
+| `str_sport` | `str` | No |  |
+| `str_team` | `str` | No |  |
+| `str_thumb` | `str` | No |  |
+| `str_weight` | `str` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl=None) -> list`
+#### `list(reqmatch=None, ctrl=None) -> list`
 
-List entities matching the given criteria. Returns a list and raises on error.
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.Player().list({})
+results = client.Player().list()
 for player in results:
     print(player)
 ```
@@ -292,28 +292,28 @@ team = client.Team()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `id_team` | ``$STRING`` | No |  |
-| `int_formed_year` | ``$STRING`` | No |  |
-| `int_stadium_capacity` | ``$STRING`` | No |  |
-| `str_alternate` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_stadium` | ``$STRING`` | No |  |
-| `str_stadium_location` | ``$STRING`` | No |  |
-| `str_team` | ``$STRING`` | No |  |
-| `str_team_badge` | ``$STRING`` | No |  |
-| `str_team_jersey` | ``$STRING`` | No |  |
-| `str_website` | ``$STRING`` | No |  |
+| `id_team` | `str` | No |  |
+| `int_formed_year` | `str` | No |  |
+| `int_stadium_capacity` | `str` | No |  |
+| `str_alternate` | `str` | No |  |
+| `str_description_en` | `str` | No |  |
+| `str_league` | `str` | No |  |
+| `str_sport` | `str` | No |  |
+| `str_stadium` | `str` | No |  |
+| `str_stadium_location` | `str` | No |  |
+| `str_team` | `str` | No |  |
+| `str_team_badge` | `str` | No |  |
+| `str_team_jersey` | `str` | No |  |
+| `str_website` | `str` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl=None) -> list`
+#### `list(reqmatch=None, ctrl=None) -> list`
 
-List entities matching the given criteria. Returns a list and raises on error.
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.Team().list({})
+results = client.Team().list()
 for team in results:
     print(team)
 ```

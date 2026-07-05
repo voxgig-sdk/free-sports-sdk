@@ -8,7 +8,7 @@ Complete API reference for the FreeSports Ruby SDK.
 ### Constructor
 
 ```ruby
-require_relative 'free-sports_sdk'
+require_relative 'FreeSports_sdk'
 
 client = FreeSportsSDK.new(options)
 ```
@@ -106,29 +106,29 @@ event = client.Event
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `date_event` | ``$STRING`` | No |  |
-| `id_event` | ``$STRING`` | No |  |
-| `int_away_score` | ``$STRING`` | No |  |
-| `int_home_score` | ``$STRING`` | No |  |
-| `str_away_team` | ``$STRING`` | No |  |
-| `str_event` | ``$STRING`` | No |  |
-| `str_home_team` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_status` | ``$STRING`` | No |  |
-| `str_thumb` | ``$STRING`` | No |  |
-| `str_time` | ``$STRING`` | No |  |
-| `str_venue` | ``$STRING`` | No |  |
-| `str_video` | ``$STRING`` | No |  |
+| `date_event` | `String` | No |  |
+| `id_event` | `String` | No |  |
+| `int_away_score` | `String` | No |  |
+| `int_home_score` | `String` | No |  |
+| `str_away_team` | `String` | No |  |
+| `str_event` | `String` | No |  |
+| `str_home_team` | `String` | No |  |
+| `str_league` | `String` | No |  |
+| `str_sport` | `String` | No |  |
+| `str_status` | `String` | No |  |
+| `str_thumb` | `String` | No |  |
+| `str_time` | `String` | No |  |
+| `str_venue` | `String` | No |  |
+| `str_video` | `String` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl = nil) -> Array`
+#### `list(reqmatch = nil, ctrl = nil) -> Array`
 
-List entities matching the given criteria. Returns an array. Raises on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
 
 ```ruby
-results = client.Event.list(nil)
+results = client.Event.list
 ```
 
 ### Common Methods
@@ -171,25 +171,25 @@ league = client.League
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `id_league` | ``$STRING`` | No |  |
-| `int_formed_year` | ``$STRING`` | No |  |
-| `str_badge` | ``$STRING`` | No |  |
-| `str_country` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_league_alternate` | ``$STRING`` | No |  |
-| `str_logo` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_website` | ``$STRING`` | No |  |
+| `id_league` | `String` | No |  |
+| `int_formed_year` | `String` | No |  |
+| `str_badge` | `String` | No |  |
+| `str_country` | `String` | No |  |
+| `str_description_en` | `String` | No |  |
+| `str_league` | `String` | No |  |
+| `str_league_alternate` | `String` | No |  |
+| `str_logo` | `String` | No |  |
+| `str_sport` | `String` | No |  |
+| `str_website` | `String` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl = nil) -> Array`
+#### `list(reqmatch = nil, ctrl = nil) -> Array`
 
-List entities matching the given criteria. Returns an array. Raises on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
 
 ```ruby
-results = client.League.list(nil)
+results = client.League.list
 ```
 
 ### Common Methods
@@ -232,27 +232,27 @@ player = client.Player
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `date_born` | ``$STRING`` | No |  |
-| `id_player` | ``$STRING`` | No |  |
-| `str_cutout` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_height` | ``$STRING`` | No |  |
-| `str_nationality` | ``$STRING`` | No |  |
-| `str_player` | ``$STRING`` | No |  |
-| `str_position` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_team` | ``$STRING`` | No |  |
-| `str_thumb` | ``$STRING`` | No |  |
-| `str_weight` | ``$STRING`` | No |  |
+| `date_born` | `String` | No |  |
+| `id_player` | `String` | No |  |
+| `str_cutout` | `String` | No |  |
+| `str_description_en` | `String` | No |  |
+| `str_height` | `String` | No |  |
+| `str_nationality` | `String` | No |  |
+| `str_player` | `String` | No |  |
+| `str_position` | `String` | No |  |
+| `str_sport` | `String` | No |  |
+| `str_team` | `String` | No |  |
+| `str_thumb` | `String` | No |  |
+| `str_weight` | `String` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl = nil) -> Array`
+#### `list(reqmatch = nil, ctrl = nil) -> Array`
 
-List entities matching the given criteria. Returns an array. Raises on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
 
 ```ruby
-results = client.Player.list(nil)
+results = client.Player.list
 ```
 
 ### Common Methods
@@ -295,28 +295,28 @@ team = client.Team
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `id_team` | ``$STRING`` | No |  |
-| `int_formed_year` | ``$STRING`` | No |  |
-| `int_stadium_capacity` | ``$STRING`` | No |  |
-| `str_alternate` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_stadium` | ``$STRING`` | No |  |
-| `str_stadium_location` | ``$STRING`` | No |  |
-| `str_team` | ``$STRING`` | No |  |
-| `str_team_badge` | ``$STRING`` | No |  |
-| `str_team_jersey` | ``$STRING`` | No |  |
-| `str_website` | ``$STRING`` | No |  |
+| `id_team` | `String` | No |  |
+| `int_formed_year` | `String` | No |  |
+| `int_stadium_capacity` | `String` | No |  |
+| `str_alternate` | `String` | No |  |
+| `str_description_en` | `String` | No |  |
+| `str_league` | `String` | No |  |
+| `str_sport` | `String` | No |  |
+| `str_stadium` | `String` | No |  |
+| `str_stadium_location` | `String` | No |  |
+| `str_team` | `String` | No |  |
+| `str_team_badge` | `String` | No |  |
+| `str_team_jersey` | `String` | No |  |
+| `str_website` | `String` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl = nil) -> Array`
+#### `list(reqmatch = nil, ctrl = nil) -> Array`
 
-List entities matching the given criteria. Returns an array. Raises on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
 
 ```ruby
-results = client.Team.list(nil)
+results = client.Team.list
 ```
 
 ### Common Methods

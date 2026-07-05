@@ -110,20 +110,20 @@ event := client.Event(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `date_event` | ``$STRING`` | No |  |
-| `id_event` | ``$STRING`` | No |  |
-| `int_away_score` | ``$STRING`` | No |  |
-| `int_home_score` | ``$STRING`` | No |  |
-| `str_away_team` | ``$STRING`` | No |  |
-| `str_event` | ``$STRING`` | No |  |
-| `str_home_team` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_status` | ``$STRING`` | No |  |
-| `str_thumb` | ``$STRING`` | No |  |
-| `str_time` | ``$STRING`` | No |  |
-| `str_venue` | ``$STRING`` | No |  |
-| `str_video` | ``$STRING`` | No |  |
+| `date_event` | `string` | No |  |
+| `id_event` | `string` | No |  |
+| `int_away_score` | `string` | No |  |
+| `int_home_score` | `string` | No |  |
+| `str_away_team` | `string` | No |  |
+| `str_event` | `string` | No |  |
+| `str_home_team` | `string` | No |  |
+| `str_league` | `string` | No |  |
+| `str_sport` | `string` | No |  |
+| `str_status` | `string` | No |  |
+| `str_thumb` | `string` | No |  |
+| `str_time` | `string` | No |  |
+| `str_venue` | `string` | No |  |
+| `str_video` | `string` | No |  |
 
 ### Operations
 
@@ -169,16 +169,16 @@ league := client.League(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `id_league` | ``$STRING`` | No |  |
-| `int_formed_year` | ``$STRING`` | No |  |
-| `str_badge` | ``$STRING`` | No |  |
-| `str_country` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_league_alternate` | ``$STRING`` | No |  |
-| `str_logo` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_website` | ``$STRING`` | No |  |
+| `id_league` | `string` | No |  |
+| `int_formed_year` | `string` | No |  |
+| `str_badge` | `string` | No |  |
+| `str_country` | `string` | No |  |
+| `str_description_en` | `string` | No |  |
+| `str_league` | `string` | No |  |
+| `str_league_alternate` | `string` | No |  |
+| `str_logo` | `string` | No |  |
+| `str_sport` | `string` | No |  |
+| `str_website` | `string` | No |  |
 
 ### Operations
 
@@ -224,18 +224,18 @@ player := client.Player(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `date_born` | ``$STRING`` | No |  |
-| `id_player` | ``$STRING`` | No |  |
-| `str_cutout` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_height` | ``$STRING`` | No |  |
-| `str_nationality` | ``$STRING`` | No |  |
-| `str_player` | ``$STRING`` | No |  |
-| `str_position` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_team` | ``$STRING`` | No |  |
-| `str_thumb` | ``$STRING`` | No |  |
-| `str_weight` | ``$STRING`` | No |  |
+| `date_born` | `string` | No |  |
+| `id_player` | `string` | No |  |
+| `str_cutout` | `string` | No |  |
+| `str_description_en` | `string` | No |  |
+| `str_height` | `string` | No |  |
+| `str_nationality` | `string` | No |  |
+| `str_player` | `string` | No |  |
+| `str_position` | `string` | No |  |
+| `str_sport` | `string` | No |  |
+| `str_team` | `string` | No |  |
+| `str_thumb` | `string` | No |  |
+| `str_weight` | `string` | No |  |
 
 ### Operations
 
@@ -281,19 +281,19 @@ team := client.Team(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `id_team` | ``$STRING`` | No |  |
-| `int_formed_year` | ``$STRING`` | No |  |
-| `int_stadium_capacity` | ``$STRING`` | No |  |
-| `str_alternate` | ``$STRING`` | No |  |
-| `str_description_en` | ``$STRING`` | No |  |
-| `str_league` | ``$STRING`` | No |  |
-| `str_sport` | ``$STRING`` | No |  |
-| `str_stadium` | ``$STRING`` | No |  |
-| `str_stadium_location` | ``$STRING`` | No |  |
-| `str_team` | ``$STRING`` | No |  |
-| `str_team_badge` | ``$STRING`` | No |  |
-| `str_team_jersey` | ``$STRING`` | No |  |
-| `str_website` | ``$STRING`` | No |  |
+| `id_team` | `string` | No |  |
+| `int_formed_year` | `string` | No |  |
+| `int_stadium_capacity` | `string` | No |  |
+| `str_alternate` | `string` | No |  |
+| `str_description_en` | `string` | No |  |
+| `str_league` | `string` | No |  |
+| `str_sport` | `string` | No |  |
+| `str_stadium` | `string` | No |  |
+| `str_stadium_location` | `string` | No |  |
+| `str_team` | `string` | No |  |
+| `str_team_badge` | `string` | No |  |
+| `str_team_jersey` | `string` | No |  |
+| `str_website` | `string` | No |  |
 
 ### Operations
 

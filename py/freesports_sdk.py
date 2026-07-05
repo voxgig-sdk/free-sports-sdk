@@ -221,25 +221,25 @@ class FreeSportsSDK:
 
 
     def Event(self, data=None) -> "EventEntity":
-        """Entity factory: client.Event().list({}) / client.Event().load({"id": ...})."""
+        """Entity factory: client.Event().list() / client.Event().load({"id": ...})."""
         from entity.event_entity import EventEntity
         return EventEntity(self, data)
 
 
     def League(self, data=None) -> "LeagueEntity":
-        """Entity factory: client.League().list({}) / client.League().load({"id": ...})."""
+        """Entity factory: client.League().list() / client.League().load({"id": ...})."""
         from entity.league_entity import LeagueEntity
         return LeagueEntity(self, data)
 
 
     def Player(self, data=None) -> "PlayerEntity":
-        """Entity factory: client.Player().list({}) / client.Player().load({"id": ...})."""
+        """Entity factory: client.Player().list() / client.Player().load({"id": ...})."""
         from entity.player_entity import PlayerEntity
         return PlayerEntity(self, data)
 
 
     def Team(self, data=None) -> "TeamEntity":
-        """Entity factory: client.Team().list({}) / client.Team().load({"id": ...})."""
+        """Entity factory: client.Team().list() / client.Team().load({"id": ...})."""
         from entity.team_entity import TeamEntity
         return TeamEntity(self, data)
 

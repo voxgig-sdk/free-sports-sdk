@@ -4,6 +4,8 @@
 
 The Lua SDK for the FreeSports API — an entity-oriented client using Lua conventions.
 
+It exposes the API as capitalised, semantic **Entities** — e.g. `client:Event()` — each with the same small set of operations (`list`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
+
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
 
@@ -43,8 +45,30 @@ local events, err = client:Event():list()
 if err then error(err) end
 
 for _, item in ipairs(events) do
-  print(item["id"], item["name"])
+  print(item["date_event"])
 end
+```
+
+
+## Error handling
+
+Entity operations return `(value, err)`. Check `err` before using
+the value:
+
+```lua
+local events, err = client:Event():list()
+if err then error(err) end
+```
+
+`direct` follows the same `(value, err)` convention:
+
+```lua
+local result, err = client:direct({
+  path = "/api/resource/{id}",
+  method = "GET",
+  params = { id = "example_id" },
+})
+if err then error(err) end
 ```
 
 
@@ -90,8 +114,8 @@ Create a mock client for unit testing — no server required:
 ```lua
 local client = sdk.test()
 
-local result, err = client:Event():load({ id = "test01" })
--- result is the loaded data; err is set on failure
+local result, err = client:Event():list()
+-- result is the returned data; err is set on failure
 ```
 
 ### Use a custom fetch function
@@ -182,11 +206,7 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch, ctrl) -> any, err` | Load a single entity by match criteria. |
 | `list` | `(reqmatch, ctrl) -> any, err` | List entities matching the criteria. |
-| `create` | `(reqdata, ctrl) -> any, err` | Create a new entity. |
-| `update` | `(reqdata, ctrl) -> any, err` | Update an existing entity. |
-| `remove` | `(reqmatch, ctrl) -> any, err` | Remove an entity. |
 | `data_get` | `() -> table` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
 | `match_get` | `() -> table` | Get entity match criteria. |
@@ -201,12 +221,11 @@ data **directly** — there is no wrapper:
 
 | Operation | `value` |
 | --- | --- |
-| `load` / `create` / `update` / `remove` | the entity record (a `table`) |
 | `list` | an array (`table`) of entity records |
 
 Check `err` first (it is non-`nil` on failure), then use `value`:
 
-    local event, err = client:Event():load({ id = "example_id" })
+    local event, err = client:Event():load()
     if err then error(err) end
     -- event is the loaded record
 
@@ -319,20 +338,20 @@ Create an instance: `local event = client:Event(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_event` | ``$STRING`` |  |
-| `id_event` | ``$STRING`` |  |
-| `int_away_score` | ``$STRING`` |  |
-| `int_home_score` | ``$STRING`` |  |
-| `str_away_team` | ``$STRING`` |  |
-| `str_event` | ``$STRING`` |  |
-| `str_home_team` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_status` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_time` | ``$STRING`` |  |
-| `str_venue` | ``$STRING`` |  |
-| `str_video` | ``$STRING`` |  |
+| `date_event` | `string` |  |
+| `id_event` | `string` |  |
+| `int_away_score` | `string` |  |
+| `int_home_score` | `string` |  |
+| `str_away_team` | `string` |  |
+| `str_event` | `string` |  |
+| `str_home_team` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_status` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_time` | `string` |  |
+| `str_venue` | `string` |  |
+| `str_video` | `string` |  |
 
 #### Example: List
 
@@ -355,16 +374,16 @@ Create an instance: `local league = client:League(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_league` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `str_badge` | ``$STRING`` |  |
-| `str_country` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_league_alternate` | ``$STRING`` |  |
-| `str_logo` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_league` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `str_badge` | `string` |  |
+| `str_country` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_league_alternate` | `string` |  |
+| `str_logo` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -387,18 +406,18 @@ Create an instance: `local player = client:Player(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_born` | ``$STRING`` |  |
-| `id_player` | ``$STRING`` |  |
-| `str_cutout` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_height` | ``$STRING`` |  |
-| `str_nationality` | ``$STRING`` |  |
-| `str_player` | ``$STRING`` |  |
-| `str_position` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_weight` | ``$STRING`` |  |
+| `date_born` | `string` |  |
+| `id_player` | `string` |  |
+| `str_cutout` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_height` | `string` |  |
+| `str_nationality` | `string` |  |
+| `str_player` | `string` |  |
+| `str_position` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_team` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_weight` | `string` |  |
 
 #### Example: List
 
@@ -421,19 +440,19 @@ Create an instance: `local team = client:Team(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_team` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `int_stadium_capacity` | ``$STRING`` |  |
-| `str_alternate` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_stadium` | ``$STRING`` |  |
-| `str_stadium_location` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_team_badge` | ``$STRING`` |  |
-| `str_team_jersey` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_team` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `int_stadium_capacity` | `string` |  |
+| `str_alternate` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_stadium` | `string` |  |
+| `str_stadium_location` | `string` |  |
+| `str_team` | `string` |  |
+| `str_team_badge` | `string` |  |
+| `str_team_jersey` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -442,12 +461,16 @@ local teams, err = client:Team():list()
 ```
 
 
-## Explanation
+## Advanced
+
+> The sections above cover everyday use. The material below explains the
+> SDK's internals — useful when extending it with custom features, but not
+> needed for normal use.
 
 ### The operation pipeline
 
-Every entity operation (load, list, create, update, remove) follows a
-six-stage pipeline. Each stage fires a feature hook before executing:
+Every entity operation follows a six-stage pipeline. Each stage fires a
+feature hook before executing:
 
 ```
 PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
@@ -464,8 +487,9 @@ PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
 - **PreDone**: Final stage before returning to the caller. Entity
   state (match, data) is updated here.
 
-If any stage returns an error, the pipeline short-circuits and the
-error is returned to the caller as a second return value.
+If any stage errors, the pipeline short-circuits and the error surfaces
+to the caller — see [Error handling](#error-handling) for how that looks
+in this language.
 
 ### Features and hooks
 
@@ -509,14 +533,14 @@ when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `load`, the entity
+Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally.
 
 ```lua
 local event = client:Event()
-event:load({ id = "example_id" })
+event:list()
 
--- event:data_get() now returns the loaded event data
+-- event:data_get() now returns the event data from the last list
 -- event:match_get() returns the last match criteria
 ```
 

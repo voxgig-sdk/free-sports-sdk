@@ -4,6 +4,8 @@
 
 The PHP SDK for the FreeSports API — an entity-oriented client using PHP conventions.
 
+The SDK exposes the API as capitalised, semantic **Entities** — for example `$client->Event()` — with named operations (`list`) instead of raw URL paths and query strings. Working with resources and verbs keeps call sites self-describing and reduces cognitive load.
+
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
 
@@ -38,10 +40,41 @@ try {
     // list() returns an array of Event records — iterate directly.
     $events = $client->Event()->list();
     foreach ($events as $item) {
-        echo $item["id"] . " " . $item["name"] . "\n";
+        echo $item["date_event"] . "\n";
     }
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
+}
+```
+
+
+## Error handling
+
+Entity operations throw a `\Throwable` on failure, so wrap them in
+`try` / `catch`:
+
+```php
+try {
+    $events = $client->Event()->list();
+} catch (\Throwable $err) {
+    echo "Error: " . $err->getMessage();
+}
+```
+
+`direct()` does **not** throw — it returns the result array. Branch on
+`ok`; on failure `status` holds the HTTP status (for error responses) and
+`err` holds a transport error, so read both defensively:
+
+```php
+$result = $client->direct([
+    "path" => "/api/resource/{id}",
+    "method" => "GET",
+    "params" => ["id" => "example_id"],
+]);
+
+if (! $result["ok"]) {
+    $err = $result["err"] ?? null;
+    echo "request failed: " . ($err ? $err->getMessage() : "HTTP " . $result["status"]);
 }
 ```
 
@@ -65,7 +98,10 @@ if ($result["ok"]) {
     echo $result["status"];  // 200
     print_r($result["data"]);  // response body
 } else {
-    echo "Error: " . $result["err"]->getMessage();
+    // On an HTTP error status there is no err (only a transport failure sets
+    // it), so fall back to the status code.
+    $err = $result["err"] ?? null;
+    echo "Error: " . ($err ? $err->getMessage() : "HTTP " . $result["status"]);
 }
 ```
 
@@ -86,16 +122,13 @@ print_r($fetchdef["headers"]);
 
 ### Use test mode
 
-Create a mock client for unit testing — no server required. Seed fixture
-data via the `entity` option so offline calls resolve without a live server:
+Create a mock client for unit testing — no server required:
 
 ```php
-$client = FreeSportsSDK::test([
-    "entity" => ["event" => ["test01" => ["id" => "test01"]]],
-]);
+$client = FreeSportsSDK::test();
 
-// load() returns the bare mock record (throws on error).
-$event = $client->Event()->load(["id" => "test01"]);
+// Entity ops return the bare mock record (throws on error).
+$event = $client->Event()->list();
 print_r($event);
 ```
 
@@ -188,11 +221,7 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `($reqmatch, $ctrl): array` | Load a single entity by match criteria. |
-| `list` | `($reqmatch, $ctrl): array` | List entities matching the criteria. |
-| `create` | `($reqdata, $ctrl): array` | Create a new entity. |
-| `update` | `($reqdata, $ctrl): array` | Update an existing entity. |
-| `remove` | `($reqmatch, $ctrl): array` | Remove an entity. |
+| `list` | `(?array $reqmatch = null, $ctrl): array` | List entities matching the criteria (call with no argument to list all). |
 | `data_get` | `(): array` | Get entity data. |
 | `data_set` | `($data): void` | Set entity data. |
 | `match_get` | `(): array` | Get entity match criteria. |
@@ -324,20 +353,20 @@ Create an instance: `$event = $client->Event();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_event` | ``$STRING`` |  |
-| `id_event` | ``$STRING`` |  |
-| `int_away_score` | ``$STRING`` |  |
-| `int_home_score` | ``$STRING`` |  |
-| `str_away_team` | ``$STRING`` |  |
-| `str_event` | ``$STRING`` |  |
-| `str_home_team` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_status` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_time` | ``$STRING`` |  |
-| `str_venue` | ``$STRING`` |  |
-| `str_video` | ``$STRING`` |  |
+| `date_event` | `string` |  |
+| `id_event` | `string` |  |
+| `int_away_score` | `string` |  |
+| `int_home_score` | `string` |  |
+| `str_away_team` | `string` |  |
+| `str_event` | `string` |  |
+| `str_home_team` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_status` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_time` | `string` |  |
+| `str_venue` | `string` |  |
+| `str_video` | `string` |  |
 
 #### Example: List
 
@@ -361,16 +390,16 @@ Create an instance: `$league = $client->League();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_league` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `str_badge` | ``$STRING`` |  |
-| `str_country` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_league_alternate` | ``$STRING`` |  |
-| `str_logo` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_league` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `str_badge` | `string` |  |
+| `str_country` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_league_alternate` | `string` |  |
+| `str_logo` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -394,18 +423,18 @@ Create an instance: `$player = $client->Player();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_born` | ``$STRING`` |  |
-| `id_player` | ``$STRING`` |  |
-| `str_cutout` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_height` | ``$STRING`` |  |
-| `str_nationality` | ``$STRING`` |  |
-| `str_player` | ``$STRING`` |  |
-| `str_position` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_weight` | ``$STRING`` |  |
+| `date_born` | `string` |  |
+| `id_player` | `string` |  |
+| `str_cutout` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_height` | `string` |  |
+| `str_nationality` | `string` |  |
+| `str_player` | `string` |  |
+| `str_position` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_team` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_weight` | `string` |  |
 
 #### Example: List
 
@@ -429,19 +458,19 @@ Create an instance: `$team = $client->Team();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_team` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `int_stadium_capacity` | ``$STRING`` |  |
-| `str_alternate` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_stadium` | ``$STRING`` |  |
-| `str_stadium_location` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_team_badge` | ``$STRING`` |  |
-| `str_team_jersey` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_team` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `int_stadium_capacity` | `string` |  |
+| `str_alternate` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_stadium` | `string` |  |
+| `str_stadium_location` | `string` |  |
+| `str_team` | `string` |  |
+| `str_team_badge` | `string` |  |
+| `str_team_jersey` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -451,12 +480,16 @@ $teams = $client->Team()->list();
 ```
 
 
-## Explanation
+## Advanced
+
+> The sections above cover everyday use. The material below explains the
+> SDK's internals — useful when extending it with custom features, but not
+> needed for normal use.
 
 ### The operation pipeline
 
-Every entity operation (load, list, create, update, remove) follows a
-six-stage pipeline. Each stage fires a feature hook before executing:
+Every entity operation follows a six-stage pipeline. Each stage fires a
+feature hook before executing:
 
 ```
 PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
@@ -473,8 +506,9 @@ PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
 - **PreDone**: Final stage before returning to the caller. Entity
   state (match, data) is updated here.
 
-If any stage returns an error, the pipeline short-circuits and the
-error is returned to the caller as the second element in the return array.
+If any stage errors, the pipeline short-circuits and the error surfaces
+to the caller — see [Error handling](#error-handling) for how that looks
+in this language.
 
 ### Features and hooks
 
@@ -518,15 +552,15 @@ when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `load`, the entity
+Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally.
 
 ```php
 $event = $client->Event();
-$event->load(["id" => "example_id"]);
+$event->list();
 
-// $event->dataGet() now returns the loaded event data
-// $event->matchGet() returns the last match criteria
+// $event->data_get() now returns the event data from the last list
+// $event->match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

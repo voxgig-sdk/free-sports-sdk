@@ -4,6 +4,11 @@
 
 The Python SDK for the FreeSports API — an entity-oriented client following Pythonic conventions.
 
+The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Event()` — each
+carrying a small, uniform set of operations (`list`) instead of raw URL
+paths and query strings. You work with named resources and verbs, which
+keeps the cognitive load low.
+
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
 
@@ -41,11 +46,39 @@ error — iterate it directly.
 
 ```python
 try:
-    events = client.Event().list({})
+    events = client.Event().list()
     for event in events:
         print(event)
 except Exception as err:
     print(f"list failed: {err}")
+```
+
+
+## Error handling
+
+Entity operations raise on failure, so wrap them in `try` / `except`:
+
+```python
+try:
+    events = client.Event().list()
+    print(events)
+except Exception as err:
+    print(f"list failed: {err}")
+```
+
+`direct()` does **not** raise — it returns the result envelope. Branch
+on `ok`; on failure `status` holds the HTTP status (for error responses)
+and `err` holds a transport error, so read both defensively:
+
+```python
+result = client.direct({
+    "path": "/api/resource/{id}",
+    "method": "GET",
+    "params": {"id": "example_id"},
+})
+
+if not result["ok"]:
+    print("request failed:", result.get("status"), result.get("err"))
 ```
 
 
@@ -66,7 +99,10 @@ if result["ok"]:
     print(result["status"])  # 200
     print(result["data"])    # response body
 else:
-    print(result["err"])     # error value
+    # A non-2xx response carries status + data (the error body); a
+    # transport-level failure carries err instead. Only one is present, so
+    # read both with .get() rather than indexing a key that may be absent.
+    print(result.get("status"), result.get("err"))
 ```
 
 ### Prepare a request without sending it
@@ -92,7 +128,7 @@ Create a mock client for unit testing — no server required:
 client = FreeSportsSDK.test()
 
 # Entity ops return the bare record and raise on error.
-event = client.Event().load({"id": "test01"})
+event = client.Event().list()
 # event contains the mock response record
 ```
 
@@ -182,11 +218,7 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria. Raises on error. |
 | `list` | `(reqmatch, ctrl) -> list` | List entities matching the criteria. Raises on error. |
-| `create` | `(reqdata, ctrl) -> any` | Create a new entity. Raises on error. |
-| `update` | `(reqdata, ctrl) -> any` | Update an existing entity. Raises on error. |
-| `remove` | `(reqmatch, ctrl) -> any` | Remove an entity. Raises on error. |
 | `data_get` | `() -> dict` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
 | `match_get` | `() -> dict` | Get entity match criteria. |
@@ -312,31 +344,31 @@ Create an instance: `event = client.Event()`
 
 | Method | Description |
 | --- | --- |
-| `list(match)` | List entities matching the criteria. |
+| `list()` | List entities, optionally matching the given criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_event` | ``$STRING`` |  |
-| `id_event` | ``$STRING`` |  |
-| `int_away_score` | ``$STRING`` |  |
-| `int_home_score` | ``$STRING`` |  |
-| `str_away_team` | ``$STRING`` |  |
-| `str_event` | ``$STRING`` |  |
-| `str_home_team` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_status` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_time` | ``$STRING`` |  |
-| `str_venue` | ``$STRING`` |  |
-| `str_video` | ``$STRING`` |  |
+| `date_event` | `str` |  |
+| `id_event` | `str` |  |
+| `int_away_score` | `str` |  |
+| `int_home_score` | `str` |  |
+| `str_away_team` | `str` |  |
+| `str_event` | `str` |  |
+| `str_home_team` | `str` |  |
+| `str_league` | `str` |  |
+| `str_sport` | `str` |  |
+| `str_status` | `str` |  |
+| `str_thumb` | `str` |  |
+| `str_time` | `str` |  |
+| `str_venue` | `str` |  |
+| `str_video` | `str` |  |
 
 #### Example: List
 
 ```python
-events = client.Event().list({})
+events = client.Event().list()
 ```
 
 
@@ -348,27 +380,27 @@ Create an instance: `league = client.League()`
 
 | Method | Description |
 | --- | --- |
-| `list(match)` | List entities matching the criteria. |
+| `list()` | List entities, optionally matching the given criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_league` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `str_badge` | ``$STRING`` |  |
-| `str_country` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_league_alternate` | ``$STRING`` |  |
-| `str_logo` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_league` | `str` |  |
+| `int_formed_year` | `str` |  |
+| `str_badge` | `str` |  |
+| `str_country` | `str` |  |
+| `str_description_en` | `str` |  |
+| `str_league` | `str` |  |
+| `str_league_alternate` | `str` |  |
+| `str_logo` | `str` |  |
+| `str_sport` | `str` |  |
+| `str_website` | `str` |  |
 
 #### Example: List
 
 ```python
-leagues = client.League().list({})
+leagues = client.League().list()
 ```
 
 
@@ -380,29 +412,29 @@ Create an instance: `player = client.Player()`
 
 | Method | Description |
 | --- | --- |
-| `list(match)` | List entities matching the criteria. |
+| `list()` | List entities, optionally matching the given criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_born` | ``$STRING`` |  |
-| `id_player` | ``$STRING`` |  |
-| `str_cutout` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_height` | ``$STRING`` |  |
-| `str_nationality` | ``$STRING`` |  |
-| `str_player` | ``$STRING`` |  |
-| `str_position` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_weight` | ``$STRING`` |  |
+| `date_born` | `str` |  |
+| `id_player` | `str` |  |
+| `str_cutout` | `str` |  |
+| `str_description_en` | `str` |  |
+| `str_height` | `str` |  |
+| `str_nationality` | `str` |  |
+| `str_player` | `str` |  |
+| `str_position` | `str` |  |
+| `str_sport` | `str` |  |
+| `str_team` | `str` |  |
+| `str_thumb` | `str` |  |
+| `str_weight` | `str` |  |
 
 #### Example: List
 
 ```python
-players = client.Player().list({})
+players = client.Player().list()
 ```
 
 
@@ -414,39 +446,43 @@ Create an instance: `team = client.Team()`
 
 | Method | Description |
 | --- | --- |
-| `list(match)` | List entities matching the criteria. |
+| `list()` | List entities, optionally matching the given criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_team` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `int_stadium_capacity` | ``$STRING`` |  |
-| `str_alternate` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_stadium` | ``$STRING`` |  |
-| `str_stadium_location` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_team_badge` | ``$STRING`` |  |
-| `str_team_jersey` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_team` | `str` |  |
+| `int_formed_year` | `str` |  |
+| `int_stadium_capacity` | `str` |  |
+| `str_alternate` | `str` |  |
+| `str_description_en` | `str` |  |
+| `str_league` | `str` |  |
+| `str_sport` | `str` |  |
+| `str_stadium` | `str` |  |
+| `str_stadium_location` | `str` |  |
+| `str_team` | `str` |  |
+| `str_team_badge` | `str` |  |
+| `str_team_jersey` | `str` |  |
+| `str_website` | `str` |  |
 
 #### Example: List
 
 ```python
-teams = client.Team().list({})
+teams = client.Team().list()
 ```
 
 
-## Explanation
+## Advanced
+
+> The sections above cover everyday use. The material below explains the
+> SDK's internals — useful when extending it with custom features, but not
+> needed for normal use.
 
 ### The operation pipeline
 
-Every entity operation (load, list, create, update, remove) follows a
-six-stage pipeline. Each stage fires a feature hook before executing:
+Every entity operation follows a six-stage pipeline. Each stage fires a
+feature hook before executing:
 
 ```
 PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
@@ -463,8 +499,9 @@ PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
 - **PreDone**: Final stage before returning to the caller. Entity
   state (match, data) is updated here.
 
-If any stage returns an error, the pipeline short-circuits and the
-error is returned to the caller as the second element in the return tuple.
+If any stage errors, the pipeline short-circuits and the error surfaces
+to the caller — see [Error handling](#error-handling) for how that looks
+in this language.
 
 ### Features and hooks
 
@@ -507,14 +544,14 @@ Import entity or utility modules directly only when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `load`, the entity
+Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally.
 
 ```python
 event = client.Event()
-event.load({"id": "example_id"})
+event.list()
 
-# event.data_get() now returns the loaded event data
+# event.data_get() now returns the event data from the last list
 # event.match_get() returns the last match criteria
 ```
 

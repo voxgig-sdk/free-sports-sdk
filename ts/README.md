@@ -4,6 +4,11 @@
 
 The TypeScript SDK for the FreeSports API — a type-safe, entity-oriented client with full async/await support.
 
+The API is exposed as capitalised, semantic **Entities** — e.g.
+`client.Event()` — each with a small set of operations (`list`)
+instead of raw URL paths and query parameters. This keeps the surface
+predictable and low-friction for both humans and AI agents.
+
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
 
@@ -39,6 +44,35 @@ const events = await client.Event().list()
 
 for (const event of events) {
   console.log(event)
+}
+```
+
+
+## Error handling
+
+Entity operations reject on failure, so wrap them in `try` / `catch`:
+
+```ts
+try {
+  const events = await client.Event().list()
+  console.log(events)
+} catch (err) {
+  console.error('list failed:', err)
+}
+```
+
+The low-level `direct()` method does **not** throw — it returns the
+value or an `Error`, so check the result before using it:
+
+```ts
+const result = await client.direct({
+  path: '/api/resource/{id}',
+  method: 'GET',
+  params: { id: 'example_id' },
+})
+
+if (result instanceof Error) {
+  throw result
 }
 ```
 
@@ -87,7 +121,7 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = FreeSportsSDK.test()
 
-const event = await client.Event().load({ id: 'test01' })
+const event = await client.Event().list()
 // event is a bare entity populated with mock response data
 console.log(event)
 ```
@@ -106,12 +140,12 @@ Entity instances remember their last match and data:
 ```ts
 const entity = client.Event()
 
-// First call sets internal match
-await entity.load({ id: 'example' })
+// First call runs the operation and stores its result
+await entity.list()
 
-// Subsequent calls reuse the stored match
+// Subsequent calls reuse the stored state
 const data = entity.data()
-console.log(data.id) // 'example'
+console.log(data)
 ```
 
 ### Add custom middleware
@@ -206,13 +240,9 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria. |
 | `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |
-| `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |
-| `update` | `update(reqdata?, ctrl?): Promise<Entity>` | Update an existing entity. |
-| `remove` | `remove(reqmatch?, ctrl?): Promise<void>` | Remove an entity. |
-| `data` | `data(data?): any` | Get or set entity data. |
-| `match` | `match(match?): any` | Get or set entity match criteria. |
+| `data` | `data(data?: Partial<Entity>): Entity` | Get or set entity data. |
+| `match` | `match(match?: Partial<Entity>): Partial<Entity>` | Get or set entity match criteria. |
 | `make` | `make(): Entity` | Create a new instance with the same options. |
 | `client` | `client(): FreeSportsSDK` | Return the parent SDK client. |
 | `entopts` | `entopts(): object` | Return a copy of the entity options. |
@@ -222,10 +252,8 @@ All entities share the same interface.
 Entity operations resolve to the entity data directly — there is no
 result envelope:
 
-- `load`, `create` and `update` resolve to a single entity object.
 - `list` resolves to an **array** of entity objects (iterate it directly;
   there is no `.data` and no `.ok`).
-- `remove` resolves to `void`.
 
 On a failed request these methods **throw**, so wrap calls in
 `try`/`catch` to handle errors. Only `direct()` returns the result
@@ -365,20 +393,20 @@ Create an instance: `const event = client.Event()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_event` | ``$STRING`` |  |
-| `id_event` | ``$STRING`` |  |
-| `int_away_score` | ``$STRING`` |  |
-| `int_home_score` | ``$STRING`` |  |
-| `str_away_team` | ``$STRING`` |  |
-| `str_event` | ``$STRING`` |  |
-| `str_home_team` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_status` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_time` | ``$STRING`` |  |
-| `str_venue` | ``$STRING`` |  |
-| `str_video` | ``$STRING`` |  |
+| `date_event` | `string` |  |
+| `id_event` | `string` |  |
+| `int_away_score` | `string` |  |
+| `int_home_score` | `string` |  |
+| `str_away_team` | `string` |  |
+| `str_event` | `string` |  |
+| `str_home_team` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_status` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_time` | `string` |  |
+| `str_venue` | `string` |  |
+| `str_video` | `string` |  |
 
 #### Example: List
 
@@ -401,16 +429,16 @@ Create an instance: `const league = client.League()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_league` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `str_badge` | ``$STRING`` |  |
-| `str_country` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_league_alternate` | ``$STRING`` |  |
-| `str_logo` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_league` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `str_badge` | `string` |  |
+| `str_country` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_league_alternate` | `string` |  |
+| `str_logo` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -433,18 +461,18 @@ Create an instance: `const player = client.Player()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `date_born` | ``$STRING`` |  |
-| `id_player` | ``$STRING`` |  |
-| `str_cutout` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_height` | ``$STRING`` |  |
-| `str_nationality` | ``$STRING`` |  |
-| `str_player` | ``$STRING`` |  |
-| `str_position` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_thumb` | ``$STRING`` |  |
-| `str_weight` | ``$STRING`` |  |
+| `date_born` | `string` |  |
+| `id_player` | `string` |  |
+| `str_cutout` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_height` | `string` |  |
+| `str_nationality` | `string` |  |
+| `str_player` | `string` |  |
+| `str_position` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_team` | `string` |  |
+| `str_thumb` | `string` |  |
+| `str_weight` | `string` |  |
 
 #### Example: List
 
@@ -467,19 +495,19 @@ Create an instance: `const team = client.Team()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id_team` | ``$STRING`` |  |
-| `int_formed_year` | ``$STRING`` |  |
-| `int_stadium_capacity` | ``$STRING`` |  |
-| `str_alternate` | ``$STRING`` |  |
-| `str_description_en` | ``$STRING`` |  |
-| `str_league` | ``$STRING`` |  |
-| `str_sport` | ``$STRING`` |  |
-| `str_stadium` | ``$STRING`` |  |
-| `str_stadium_location` | ``$STRING`` |  |
-| `str_team` | ``$STRING`` |  |
-| `str_team_badge` | ``$STRING`` |  |
-| `str_team_jersey` | ``$STRING`` |  |
-| `str_website` | ``$STRING`` |  |
+| `id_team` | `string` |  |
+| `int_formed_year` | `string` |  |
+| `int_stadium_capacity` | `string` |  |
+| `str_alternate` | `string` |  |
+| `str_description_en` | `string` |  |
+| `str_league` | `string` |  |
+| `str_sport` | `string` |  |
+| `str_stadium` | `string` |  |
+| `str_stadium_location` | `string` |  |
+| `str_team` | `string` |  |
+| `str_team_badge` | `string` |  |
+| `str_team_jersey` | `string` |  |
+| `str_website` | `string` |  |
 
 #### Example: List
 
@@ -488,12 +516,16 @@ const teams = await client.Team().list()
 ```
 
 
-## Explanation
+## Advanced
+
+> The sections above cover everyday use. The material below explains the
+> SDK's internals — useful when extending it with custom features, but not
+> needed for normal use.
 
 ### The operation pipeline
 
-Every entity operation (load, list, create, update, remove) follows a
-six-stage pipeline. Each stage fires a feature hook before executing:
+Every entity operation follows a six-stage pipeline. Each stage fires a
+feature hook before executing:
 
 ```
 PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
@@ -510,11 +542,9 @@ PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
 - **PreDone**: Final stage before returning to the caller. Entity
   state (match, data) is updated here.
 
-If any stage returns an error, the pipeline short-circuits and the
-error is returned to the caller.
-
-An unexpected exception triggers the `PreUnexpected` hook before
-propagating.
+If any stage errors, the pipeline short-circuits and the error surfaces
+to the caller — see [Error handling](#error-handling) for how that looks
+in this language.
 
 ### Features and hooks
 
@@ -550,16 +580,16 @@ import { FreeSportsSDK } from '@voxgig-sdk/free-sports'
 
 ### Entity state
 
-Entity instances are stateful. After a successful `load`, the entity
+Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
 const event = client.Event()
-await event.load({ id: "example_id" })
+await event.list()
 
-// event.data() now returns the loaded event data
-// event.match() returns { id: "example_id" }
+// event.data() now returns the event data from the last `list`
+// event.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration
