@@ -39,7 +39,7 @@ class Config {
     base: 'https://www.thesportsdb.com/api/v1/json',
 
     auth: {
-      prefix: 'Bearer',
+      prefix: '',
     },
 
     headers: {

@@ -8,16 +8,23 @@ main: {
         email: "info@thesportsdb.com"
       }
       description: "Provides free JSON sports API for accessing basic sports data, including information on teams, players, events, and more. Offers test API keys, API limits, and upgrade options for premium features."
+      security: {
+        in: "path"
+        name: "apiKey"
+        prefix: ""
+        scheme: "ApiKeyAuth"
+        type: "apiKey"
+      }
       servers: [
         {
           description: "Production server (API v1)"
           url: "https://www.thesportsdb.com/api/v1/json"
         }
       ]
+      summary: "Provides free JSON sports API for accessing basic sports data, including information on teams, players, events, and more."
       termsOfService: "https://www.thesportsdb.com/terms"
       title: "Free Sports API"
       version: "1.0.0"
+      website: "https://thesportsdb.com"
     }
   }
-}
-

@@ -16,7 +16,7 @@ def make_config():
         "options": {
             "base": "https://www.thesportsdb.com/api/v1/json",
             "auth": {
-                "prefix": "Bearer",
+                "prefix": "",
             },
             "headers": {
         "content-type": "application/json",

@@ -104,6 +104,7 @@ same parameters as `Direct()`.
 
 ```go
 event := client.Event(nil)
+fmt.Println(event.GetName()) // "event"
 ```
 
 ### Fields
@@ -133,6 +134,10 @@ List entities matching the given criteria. Returns an array.
 
 ```go
 results, err := client.Event(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(results)
 ```
 
 ### Common Methods
@@ -163,6 +168,7 @@ Return the entity name.
 
 ```go
 league := client.League(nil)
+fmt.Println(league.GetName()) // "league"
 ```
 
 ### Fields
@@ -188,6 +194,10 @@ List entities matching the given criteria. Returns an array.
 
 ```go
 results, err := client.League(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(results)
 ```
 
 ### Common Methods
@@ -218,6 +228,7 @@ Return the entity name.
 
 ```go
 player := client.Player(nil)
+fmt.Println(player.GetName()) // "player"
 ```
 
 ### Fields
@@ -245,6 +256,10 @@ List entities matching the given criteria. Returns an array.
 
 ```go
 results, err := client.Player(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(results)
 ```
 
 ### Common Methods
@@ -275,6 +290,7 @@ Return the entity name.
 
 ```go
 team := client.Team(nil)
+fmt.Println(team.GetName()) // "team"
 ```
 
 ### Fields
@@ -303,6 +319,10 @@ List entities matching the given criteria. Returns an array.
 
 ```go
 results, err := client.Team(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(results)
 ```
 
 ### Common Methods

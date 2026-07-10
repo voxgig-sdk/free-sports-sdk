@@ -6,9 +6,6 @@
     },
     "kit": {
       "config": {
-        "auth": {
-          "prefix": "Bearer"
-        },
         "docs_order": [
           "ts",
           "py",
@@ -828,15 +825,25 @@
           "email": "info@thesportsdb.com"
         },
         "description": "Provides free JSON sports API for accessing basic sports data, including information on teams, players, events, and more. Offers test API keys, API limits, and upgrade options for premium features.",
+        "meta_source": "https://www.freepublicapis.com",
+        "security": {
+          "in": "path",
+          "name": "apiKey",
+          "prefix": "",
+          "scheme": "ApiKeyAuth",
+          "type": "apiKey"
+        },
         "servers": [
           {
             "description": "Production server (API v1)",
             "url": "https://www.thesportsdb.com/api/v1/json"
           }
         ],
+        "summary": "Provides free JSON sports API for accessing basic sports data, including information on teams, players, events, and more.",
         "termsOfService": "https://www.thesportsdb.com/terms",
         "title": "Free Sports API",
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "website": "https://thesportsdb.com"
       },
       "option": {},
       "target": {
@@ -889,6 +896,9 @@
           },
           "name": "go-cli",
           "phase": {
+            "agentguide": {
+              "active": false
+            },
             "entity": {
               "active": false
             },
@@ -939,6 +949,9 @@
           },
           "name": "go-mcp",
           "phase": {
+            "agentguide": {
+              "active": false
+            },
             "entity": {
               "active": false
             },
