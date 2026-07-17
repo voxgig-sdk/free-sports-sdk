@@ -1,4 +1,4 @@
--- ProjectName SDK exists test
+-- FreeSports SDK exists test
 
 local sdk = require("free-sports_sdk")
 
